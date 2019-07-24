@@ -1,41 +1,41 @@
-SparkFun <PRODUCT NAME>
+SparkFun Qwiic Switch Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
 ========================================
 
-![SparkFun Part Name](URL for picture of part)
+![SparkFun Qwiic Switch](https://media3.giphy.com/media/QDRJ6IJzFSR1K/giphy.gif?cid=790b76115d3890a136502f784580e010&rid=giphy.gif)
+![SparkFun Qwiic Button](https://media0.giphy.com/media/RhrAmVUHxjTQvEPBWi/giphy.gif?cid=790b76115d38873050324a712e8e4c84&rid=giphy.gif)
 
-[*SparkFun Part Name (SKU)*](URL for product on Sparkfun.com)
+This library allows the user to:
 
-<Basic description of the part.>
+* Determine whether or not the button/switch is pressed 
+* Set the brightness of the onboard LED
+* Configure the onboard LED's "breathing" effect
+* Use button-based interrrupts
+* Adjust the device's I<sup>2</sup>C address
+
 
 Repository Contents
 -------------------
 
-* **/Documentation** - Data sheets, additional product information
-* **/Enclosure** - Enclosure files 
-* **/Firmware** - Example code 
-* **/Hardware** - Eagle design files (.brd, .sch)
-* **/Libraries** - Libraries for use with the <PRODUCT NAME>
-* **/Production** - Production panel files (.brd)
-* **/Software** - Related software for the <PRODUCT NAME>
+* **/examples** - Example sketches for the library (.ino). Run these from the Arduino IDE. 
+* **/src** - Source files for the library (.cpp, .h).
+* **keywords.txt** - Keywords from this library that will be highlighted in the Arduino IDE. 
+* **library.properties** - General library properties for the Arduino package manager. 
 
 Documentation
 --------------
-* **[Library](GitHub library URL)** - <LANGUAGE> library for the <PRODUCT NAME>.
-* **[Hookup Guide](Learn.SparkFun URL)** - Basic hookup guide for the <PRODUCT NAME>.
-* **[SparkFun Fritzing repo](https://github.com/sparkfun/Fritzing_Parts)** - Fritzing diagrams for SparkFun products.
-* **[SparkFun 3D Model repo](https://github.com/sparkfun/3D_Models)** - 3D models of SparkFun products. 
-* **[SparkFun Graphical Datasheets](https://github.com/sparkfun/Graphical_Datasheets)** -Graphical Datasheets for various SparkFun products.
 
-Product Versions
-----------------
-* [Part SKU](part URL)- Basic part and short description here
-* [Retail part SKU](retail URL)- Retail packaging of standard description here
-* [Any other parts this repo covers](any other URLs) - Description of said parts
+* **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
+* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun MCP9600 Breakout.
+
+Products that use this Library 
+---------------------------------
+
+* [*SPX-31416*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 Version History
 ---------------
-* [vExxFxxZxxHxxLxxSxx](URL for tag specific to this version) - Description 
-* [vEyyFyyZyyHyyLyySyy](URL for tag specific to this version) - Description
+
+* [v1.0.0](https://www.youtube.com/watch?v=dQw4w9WgXcQ) - Initial Public release.
 
 License Information
 -------------------
@@ -44,10 +44,8 @@ This product is _**open source**_!
 
 Please review the LICENSE.md file for license information. 
 
-If you have any questions or concerns on licensing, please contact technical support on our [SparkFun forums](https://forum.sparkfun.com/viewforum.php?f=152).
+If you have any questions or concerns on licensing, please contact techsupport@sparkfun.com.
 
 Distributed as-is; no warranty is given.
 
 - Your friends at SparkFun.
-
-_<COLLABORATION CREDIT>_
