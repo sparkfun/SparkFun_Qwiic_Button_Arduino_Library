@@ -58,7 +58,7 @@ class QwiicButton {
 public: 
     //Status and Configuration functions
     bool begin(uint8_t address = DEFAULT_DEVICE_ADDR, 
-        TwoWire &wirePort = Wire)
+        TwoWire &wirePort = Wire);
     uint8_t getAddress();                                   //Returns the device's I2C address
     uint8_t setAddress();                                   //NEED TO IMPLEMENT!!
     bool isConnected();                                     //Returns true if the device will acknowledge over I2C
