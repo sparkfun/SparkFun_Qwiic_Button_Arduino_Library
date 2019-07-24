@@ -1,4 +1,4 @@
-SparkFun Qwiic Switch Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
+SparkFun Qwiic Button Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
 ========================================
 
 ![SparkFun Qwiic Switch](https://media3.giphy.com/media/QDRJ6IJzFSR1K/giphy.gif?cid=790b76115d3890a136502f784580e010&rid=giphy.gif)
@@ -25,12 +25,14 @@ Documentation
 --------------
 
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
-* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun MCP9600 Breakout.
+* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun Qwiic Switch.
+* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun Qwiic Button.
 
 Products that use this Library 
 ---------------------------------
 
 * [*SPX-31416*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+* [*SPX-27183*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 Version History
 ---------------
