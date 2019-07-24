@@ -1,8 +1,9 @@
 /******************************************************************************
-Checks whether the button is pressed, and then prints its status!
+Checks whether the button is pressed, and light it up if it is! Also prints
+status to the serial monitor.
 
 Fischer Moseley @ SparkFun Electronics
-Original Creation Date: June 28, 2019
+Original Creation Date: July 24, 2019
 
 This code is beerware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!

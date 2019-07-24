@@ -26,9 +26,10 @@ Distributed as-is; no warranty is given.
 
 
 //Constructs a QwiicButton object with user-specified I2C address and port
-QwiicButton::QwiicButton(TwoWire &wirePort, uint8_t addr){
+bool QwiicButton::begin(uint8_t address = DEFAULT_DEVICE_ADDR, TwoWire &wirePort = Wire);
     _i2cPort = wirePort; //use an arbitrary I2C port. Set to use Wire by default in the header file 
     _deviceAddress = addr; //I2C address of the button
+    return isConnected();
 }
 
 //Returns the I2C address of the QwiicButton
@@ -143,36 +144,26 @@ void QwiicButton::wipeButtonClickedQueue(){ //clears the queue of button click e
 /*---------------- Direct Register Read/Write ------------------ */
 
 //Reads a 8-bit register from the Qwiic Button
-uint8_t QwiicButton::readSingleRegister(QwiicButton_Register reg){ 
+uint8_t QwiicButton::readSingleRegister(QwiicButton_Register reg){
   _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(uint8_t(reg));
+  _i2cPort->write(reg);
   _i2cPort->endTransmission();
-  _i2cPort->requestFrom(_deviceAddress, 1);
-  if(_i2cPort->available()){
-    return _i2cPort->read();
-  }
-  else{
-    return 0;
+  if(_i2cPort->requestFrom(_deviceAddress, 1) != 0){
+    return _i2cPort->read();     
   }
 }
 
 //Reads a 16-bit register from the Qwiic Button (little endian)
-uint16_t QwiicButton::readDoubleRegister(QwiicButton_Register reg){ 
+uint16_t QwiicButton::readDoubleRegister(QwiicButton_Register reg){
   _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(uint8_t(reg));
+  _i2cPort->write(reg);
   _i2cPort->endTransmission();
-  _i2cPort->requestFrom(_deviceAddress, 2);
 
-  if(_i2cPort->available()){
-    uint16_t data = _i2cPort->read();
-		data |= _i2cPort->read() << 8;
-		return data;
+  if(_i2cPort->requestFrom(_deviceAddress, 2) != 0){
+    uint16_t data = _i2cPort->read() << 8;
+    data |= _i2cPort->read();
+    return data;
   }
-  
-  else {
-    return 0;
-  }
-
 }
 
 //Write a byte to a single 8-bit register
@@ -180,14 +171,14 @@ uint8_t QwiicButton::writeSingleRegister(QwiicButton_Register reg, uint8_t data)
   _i2cPort->beginTransmission(_deviceAddress);
   _i2cPort->write(reg);
   _i2cPort->write(data);
-  return _i2cPort->endTransmission();
+  return (_i2cPort->endTransmission() != 0);
 }
 
 //Write two bytes to a 16-bit register (little endian)
-uint8_t QwiicButton::writeDoubleRegister(QwiicButton_Register reg, uint16_t data){ 
+uint8_t QwiicButton::writeDoubleRegister(QwiicButton_Register reg, uint16_t data){
   _i2cPort->beginTransmission(_deviceAddress);
   _i2cPort->write(reg);
-  _i2cPort->write(lowByte(data));
   _i2cPort->write(highByte(data));
-  return _i2cPort->endTransmission();
+  _i2cPort->write(lowByte(data));
+  return (_i2cPort->endTransmission() != 0);
 }
