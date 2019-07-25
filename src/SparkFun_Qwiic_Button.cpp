@@ -83,8 +83,8 @@ bool QwiicButton::isClicked(){
 bool QwiicButton::configLED(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime){
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
     success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
-    success &= writeSingleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
-    success &= writeSingleRegister(LED_PULSE_OFF_TIME, offTime);
+    success &= writeDoubleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
+    success &= writeDoubleRegister(LED_PULSE_OFF_TIME, offTime);
     return success;
 }
 
@@ -122,7 +122,7 @@ bool QwiicButton::writeSingleRegister(uint8_t reg, uint8_t data){
 bool QwiicButton::writeDoubleRegister(uint8_t reg, uint16_t data){
     _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
-    _i2cPort->write(highByte(data));
     _i2cPort->write(lowByte(data));
+    _i2cPort->write(highByte(data));
     return (_i2cPort->endTransmission() != 0);
 }

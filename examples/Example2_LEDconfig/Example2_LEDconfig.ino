@@ -34,6 +34,8 @@ void setup(){
         Serial.println("Device did not acknowledge! Freezing.");
         while(1);
     }
+
+    button.configLED(150, 1, 1000, 4000);
 }
 
 void loop(){
