@@ -1,16 +1,17 @@
 /******************************************************************************
 SparkFun_Qwiic_Button.h
-SparkFun Qwiic Button Header File
+SparkFun Qwiic Button/Switch Library Header File
 Fischer Moseley @ SparkFun Electronics
-Original Creation Date: June 28, 2019
+Original Creation Date: July 24, 2019
 https://github.com/sparkfunX/
 
-This file prototypes the QwiicSwitch class as implemented in SparkFunQwiicSwitch.cpp
+This file prototypes the QwiicButton class, implemented in SparkFun_Qwiic_Button.cpp.
 
 Development environment specifics:
 	IDE: Arduino 1.8.9
-	Hardware Platform: Arduino Uno
-	Qwiic Button Version: 1.0
+	Hardware Platform: Arduino Uno/SparkFun Redboard
+	Qwiic Button Breakout Version: 1.0.0
+    Qwiic Switch Breakout Version: 1.0.0
 
 This code is beerware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!
@@ -24,75 +25,59 @@ Distributed as-is; no warranty is given.
 #include <Wire.h>
 #include <Arduino.h>
 
-#define DEFAULT_DEVICE_ADDR 0x5F
-
-//Qwiic Button Register Map
-enum QwiicButton_Register {
-  BUTTON_ID = 0x00,
-  BUTTON_STATUS = 0x01,
-  BUTTON_FIRMWARE = 0x02, //16-bit register where 0x02 is the MSB and 0x03 is the LSB
-  BUTTON_INTERRUPT_ENABLE = 0x04,
-  BUTTON_TIME_SINCE_OLDEST_PRESS = 0x05,
-  BUTTON_TIME_SINCE_OLDEST_CLICK = 0x07,
-  BUTTON_LED_BRIGHTNESS = 0x09,
-  BUTTON_LED_PULSE_GRANULATITY = 0x0A,
-  BUTTON_LED_PULSE_CYCLE_TIME = 0x0B,
-  BUTTON_LED_PULSE_OFF_TIME = 0x0D,
-  BUTTON_DEBOUNCE_TIME = 0x0F,
-  BUTTON_I2C_ADDR = 0x10,
-};
-
-//Locations of Various Bits in the Status Register
-const byte statusButtonPressedBufferEmptyBit = 5;
-const byte statusButtonPressedBufferFullBit = 4;
-const byte statusButtonClickedBufferEmptyBit = 3;
-const byte statusButtonClickedBufferFullBit = 2;
-const byte statusButtonClickedBit = 1;
-const byte statusButtonPressedBit = 0;
-
-const byte enableInterruptButtonClickedBit = 1;
-const byte enableInterruptButtonPressedBit = 0;
+#define DEV_ADDR 0x5F //default device address of the QwiicButton
+#define DEV_ID_BTN 0x5D //device ID of the Qwiic Button
+#define DEV_ID_SW 0x5E //device ID of the Qwiic Switch
 
 class QwiicButton {
+    private:
+    //Register Pointer Map:
+    const uint8_t ID = 0x00;
+    const uint8_t STATUS = 0x01;
+    const uint8_t FIRMWARE_MINOR = 0x02;
+    const uint8_t FIRMWARE_MAJOR = 0x03;
+    const uint8_t INTERRUPT_ENABLE = 0x04;
+    const uint8_t TIME_SINCE_LAST_BUTTON_PRESSED = 0x05;
+    const uint8_t TIME_SINCE_LAST_BUTTON_CLICKED = 0x07;
+    const uint8_t LED_BRIGHTNESS = 0x09;
+    const uint8_t LED_PULSE_GRANULARITY = 0x0A;
+    const uint8_t LED_PULSE_CYCLE_TIME = 0x0B;
+    const uint8_t LED_PULSE_OFF_TIME = 0x0D;
+    const uint8_t BUTTON_DEBOUNCE_TIME = 0x0F;
+    const uint8_t I2C_ADDRESS = 0x12;
 
-public: 
-    //Status and Configuration functions
-    bool begin(uint8_t address = DEFAULT_DEVICE_ADDR, 
-        TwoWire &wirePort = Wire);
-    uint8_t getAddress();                                   //Returns the device's I2C address
-    uint8_t setAddress();                                   //NEED TO IMPLEMENT!!
-    bool isConnected();                                     //Returns true if the device will acknowledge over I2C
-    uint8_t getDeviceID();                                  //Returns the button's Device IDE
-    uint16_t getFirmwareVersion();                          //Returns the version of firmware running on the button
-    uint8_t getDebounceTime();                              //Returns the value of the time that the button wait for debouncing (in ms)
-    uint8_t setDebounceTime(uint8_t time);                  //Sets how long to wait for debouncing (in ms)
-    uint8_t configureLED(uint8_t brightness, uint8_t 
-        granularity, uint16_t cycleTime, uint16_t offTime); //Configures the LED built into the button
-    bool isPressed();                                       //Returns true if the button is pressed, false otherwise
-    bool isClicked();                                       //Returns true if the button is clicked, false otherwise
-    
-    bool isPressedBufferEmpty();                            //Returns true if the ButtonPressed buffer is empty, false otherwise
-    bool isPressedBufferFull();                             //Returns true if the ButtonPressed buffer is full, false otherwise 
-    bool isClickedBufferEmpty();                            //Returns true if the ButtonClicked buffer is empty, false otherwise
-    bool isClickedBufferFull();                             //Returns true if the ButtonClicked buffer is full, false otherwise
+    //Status Register BitField
+    const uint8_t pressedBufferEmptyBit = 5;
+    const uint8_t pressedBufferFullBit = 4;
+    const uint8_t clickedBufferEmptyBit = 3;
+    const uint8_t clickedBufferFullBit = 2;
+    const uint8_t clickedBit = 1;
+    const uint8_t pressedBit = 0;
 
-    //Queue Manipulation functions
-    uint16_t getOldestButtonPress();                        //Returns the amount of time that has passed since the oldest button press (in ms)
-    uint16_t getOldestButtonClick();                        //Returns the amount of time that has passed since the oldest button click (in ms)
-    uint8_t popButtonPressedQueue();                        //Clears the oldest entry from the queue of button press event times
-    uint8_t popButtonClickedQueue();                        //Clears the oldest entry from the queue of button click event times
-    void wipeButtonPressedQueue();                          //Clears the queue of button press event times 
-    void wipeButtonClickedQueue();                          //Clears the queue of button click event times
+    TwoWire *_i2cPort;                                                //Generic connection to user's chosen I2C port
+    uint8_t _deviceAddress;                                           //I2C address of the button/switch
 
+    public:
+    //Device status
+    bool begin(uint8_t address = DEV_ADDR, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies. 
+    bool isConnected();                                               //Returns true if the button/switch will acknowledge over I2C, and false otherwise
+    uint8_t deviceID();                                               //Return the 8-bit device ID of the attached device.
+    bool checkDeviceID();                                             //Returns true if the device ID matches that of either the button or the switch
+    uint8_t getDeviceType();                                          //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
+    uint16_t getFirmwareVersion();                                    //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
 
+    //Button status
+    bool isPressed();                                                 //Returns 1 if the button/switch is pressed, and 0 otherwise
+    bool isClicked();                                                 //Returns 1 if the button/switch is clicked, and 0 otherwise
 
-private: 
-    TwoWire *_i2cPort = NULL; //Generic connection to user's chosen I2C Hardware
-    uint8_t _deviceAddress;
+    //LED configuration
+    bool configLED(uint8_t brightness, uint8_t granularity,
+        uint16_t cycleTime, uint16_t offTime);                        //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
 
-    //Direct Register Read/Write functions
-    uint8_t readsingleRegister(QwiicButton_Register reg);   //Reads a 8-bit register from the Qwiic Button
-    uint16_t readDoubleRegister(QwiicButton_Register reg);  //Reads a 16-bit register from the Qwiic Button (little endian)
-    uint8_t writeSingleRegister(QwiicButton_Register reg);  //Write a byte to a single 8-bit register
-    uint8_t writeDoubleRegister(QwiicButton_Register reg);  //Write two bytes to a 16-bit register (little endian)
-}
+    //Internal I2C Abstraction
+    uint8_t readSingleRegister(uint8_t reg);                           //Reads a single 8-bit register.
+    uint16_t readDoubleRegister(uint8_t reg);                          //Reads a 16-bit register (little endian).
+    bool writeSingleRegister(uint8_t reg, uint8_t data);               //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    bool writeDoubleRegister(uint8_t reg, uint16_t data);              //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+};
+#endif

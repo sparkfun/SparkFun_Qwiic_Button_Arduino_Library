@@ -1,18 +1,17 @@
 /******************************************************************************
 SparkFun_Qwiic_Button.cpp
-SparkFun Qwiic Button Source File
+SparkFun Qwiic Button/Switch Library Source File
 Fischer Moseley @ SparkFun Electronics
-Original Creation Date: June 28, 2019
+Original Creation Date: July 24, 2019
 https://github.com/sparkfunX/
 
-This file implements all functions of the QwiccButton class. Functions for reading
-button status, manipulating the event queue, configuring interrupts, and controlling
-the built-in LED are defined here.
+This file implements the QwiicButton class, prototyped in SparkFun_Qwiic_Button.h
 
 Development environment specifics:
 	IDE: Arduino 1.8.9
-	Hardware Platform: Arduino Uno
-	Qwiic Button Version: 1.0
+	Hardware Platform: Arduino Uno/SparkFun Redboard
+	Qwiic Button Version: 1.0.0
+    Qwiic Switch Version: 1.0.0
 
 This code is beerware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!
@@ -20,165 +19,110 @@ local, and you've found our code helpful, please buy us a round!
 Distributed as-is; no warranty is given.
 ******************************************************************************/
 
-#include <Arduino.h>
 #include <Wire.h>
 #include <SparkFun_Qwiic_Button.h>
 
+#if defined(ARDUINO) && ARDUINO >= 100
+#include "Arduino.h"
+#else
+#include "WProgram.h"
+#endif
 
-//Constructs a QwiicButton object with user-specified I2C address and port
-bool QwiicButton::begin(uint8_t address = DEFAULT_DEVICE_ADDR, TwoWire &wirePort = Wire);
-    _i2cPort = wirePort; //use an arbitrary I2C port. Set to use Wire by default in the header file 
-    _deviceAddress = addr; //I2C address of the button
-    return isConnected();
+/*-------------------------------- Device Status ------------------------*/
+
+bool QwiicButton::begin(uint8_t address, TwoWire &wirePort){
+    _deviceAddress = address; //grab the address that the sensor is on
+    _i2cPort = &wirePort; //grab the port that the user wants to use
+    
+    //return true if the device is connected and the device ID is what we expect
+    bool success = isConnected();
+    success &= checkDeviceID();
+    return success;
 }
 
-//Returns the I2C address of the QwiicButton
-uint8_t QwiicButton::getAddress(){
-	return _deviceAddress;
-}
-
-//Sets the I2C address of the QwiicButton
-uint8_t QwiicButton::setAddress(){
-	//NEED TO IMPLEMENT!
-}
-
-//Returns true if the device will acknowledge over I2C
 bool QwiicButton::isConnected(){
-  _i2cPort->beginTransmission(_deviceAddress);
-  if(_i2cPort->endTransmission()!=0){
-    return false;
-  }
-  return true;
+    _i2cPort->beginTransmission(_deviceAddress);
+    return (_i2cPort->endTransmission() == 0);
 }
 
-//Returns the button's Device ID
-uint8_t QwiicButton::getDeviceID(){
-  return readSingleRegister(BUTTON_ID);
+uint8_t QwiicButton::deviceID(){
+    return readSingleRegister(ID); //read and return the value in the ID register
 }
 
-//Returns the version of firmware running on the button
+bool QwiicButton::checkDeviceID(){
+    return ( (deviceID() == DEV_ID_SW) || (deviceID() == DEV_ID_BTN) ); //Return true if the device ID matches either the button or the switch
+}
+
+uint8_t QwiicButton::getDeviceType(){
+    if(isConnected()){ //only try to get the device ID if the device will acknowledge
+        uint8_t id = deviceID();
+        if(id == DEV_ID_BTN) return 1; //
+        if(id == DEV_ID_SW) return 2;
+    }
+    return 0;
+}
+
 uint16_t QwiicButton::getFirmwareVersion(){
-  return readDoubleRegister(BUTTON_FIRMWARE);
+    uint16_t version = (readSingleRegister(FIRMWARE_MAJOR)) << 8;
+    version |= readSingleRegister(FIRMWARE_MINOR);
+    return version;
 }
 
-//Returns the value of the time that the button waits for debouncing (in ms)
-uint8_t QwiicButton::getDebounceTime(){
-  return readSingleRegister(BUTTON_DEBOUNCE_TIME);
-}
 
-//Sets how long to wait for debouncing (in ms)
-uint8_t QwiicButton::setDebounceTime(uint8_t time){
-  return writeSingleRegister(BUTTON_DEBOUNCE_TIME, uint8_t(time));
-}
-
-//Configures the LED built into the button
-uint8_t QwiicButton::configureLED(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime){
-  writeSingleRegister(BUTTON_LED_BRIGHTNESS, brightness);
-  writeSingleRegister(BUTTON_LED_PULSE_GRANULATITY, granularity);
-  writeDoubleRegister(BUTTON_LED_PULSE_CYCLE_TIME, cycleTime);
-  writeDoubleRegister(BUTTON_LED_PULSE_OFF_TIME, offTime); 
-}
-
-//Returns true if the button is pressed, false otherwise
+/*------------------------------ Button Status ---------------------- */
 bool QwiicButton::isPressed(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonPressedBit);
+    return bitRead(readSingleRegister(STATUS), pressedBit);
 }
 
-//Returns true if the button has been clicked, false otherwise
 bool QwiicButton::isClicked(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonClickedBit);
-}
-
-//Returns true if the ButtonPressed buffer is empty, false otherwise
-bool QwiicButton::isPressedBufferEmpty(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonPressedBufferEmptyBit);
-}
-
-//Returns true if the ButtonPressed buffer is full, false otherwise
-bool QwiicButton::isPressedBufferFull(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonPressedBufferFullBit);
-}
-
-//Returns true if the ButtonClicked buffer is empty, false otherwise
-bool QwiicButton::isClickedBufferEmpty(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonClickedBufferEmptyBit);
-}
-
-//Returns true if the ButtonClicked buffer is full, false otherwise
-bool QwiicButton::isClickedBufferFull(){
-  return bitRead(readSingleRegister(BUTTON_STATUS), statusButtonClickedBufferFullBit);
+    return bitRead(readSingleRegister(STATUS), clickedBit);
 }
 
 
-/*------------------- Queue Manipulation Functions -------------------- */
-
-uint16_t QwiicButton::getOldestButtonPress(){ //returns the amount of time that has passed since the oldest button press (in ms)
-  return readDoubleRegister(BUTTON_TIME_SINCE_OLDEST_PRESS);
-}
-
-uint16_t QwiicButton::getOldestButtonClick(){ //returns the amount of time that has passed since the oldest button click (in ms)
-  return readDoubleRegister(BUTTON_TIME_SINCE_OLDEST_CLICK);
-}
-
-uint8_t QwiicButton::popButtonPressedQueue(){ //clears the oldest entry from the queue of button press event times
-  return writeDoubleRegister(BUTTON_TIME_SINCE_OLDEST_PRESS, 0x0000);
-}
-
-uint16_t QwiicButton::popButtonClickedQueue(){ //clears the oldest entry from the queue of button click event times
-  return writeDoubleRegister(BUTTON_TIME_SINCE_OLDEST_CLICK, 0x0000);
-}
-
-void QwiicButton::wipeButtonPressedQueue(){ //clears the queue of button press event times
-  while(!isPressedBufferEmpty()){
-    popButtonPressedQueue();
-  }
-}
-
-void QwiicButton::wipeButtonClickedQueue(){ //clears the queue of button click event times
-  while(!isClickedBufferEmpty()){
-    popButtonClickedQueue();
-  }
+/*---------------------------- LED Configuration -------------------- */
+bool QwiicButton::configLED(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime){
+    bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
+    success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
+    success &= writeSingleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
+    success &= writeSingleRegister(LED_PULSE_OFF_TIME, offTime);
+    return success;
 }
 
 
-/*---------------- Direct Register Read/Write ------------------ */
+/*------------------------- Internal I2C Abstraction ---------------- */
 
-//Reads a 8-bit register from the Qwiic Button
-uint8_t QwiicButton::readSingleRegister(QwiicButton_Register reg){
-  _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(reg);
-  _i2cPort->endTransmission();
-  if(_i2cPort->requestFrom(_deviceAddress, 1) != 0){
+uint8_t QwiicButton::readSingleRegister(uint8_t reg){
+    _i2cPort->beginTransmission(DEV_ADDR);
+    _i2cPort->write(reg);
+    _i2cPort->endTransmission();
+    if(_i2cPort->requestFrom(DEV_ADDR, 1) != 0){
     return _i2cPort->read();     
-  }
+    }
 }
 
-//Reads a 16-bit register from the Qwiic Button (little endian)
-uint16_t QwiicButton::readDoubleRegister(QwiicButton_Register reg){
-  _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(reg);
-  _i2cPort->endTransmission();
+uint16_t QwiicButton::readDoubleRegister(uint8_t reg){
+    _i2cPort->beginTransmission(DEV_ADDR);
+    _i2cPort->write(reg);
+    _i2cPort->endTransmission();
 
-  if(_i2cPort->requestFrom(_deviceAddress, 2) != 0){
+    if(_i2cPort->requestFrom(DEV_ADDR, 2) != 0){
     uint16_t data = _i2cPort->read() << 8;
     data |= _i2cPort->read();
     return data;
-  }
+    }
 }
 
-//Write a byte to a single 8-bit register
-uint8_t QwiicButton::writeSingleRegister(QwiicButton_Register reg, uint8_t data){
-  _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(reg);
-  _i2cPort->write(data);
-  return (_i2cPort->endTransmission() != 0);
+bool QwiicButton::writeSingleRegister(uint8_t reg, uint8_t data){
+    _i2cPort->beginTransmission(_deviceAddress);
+    _i2cPort->write(reg);
+    _i2cPort->write(data);
+    return (_i2cPort->endTransmission() != 0);
 }
 
-//Write two bytes to a 16-bit register (little endian)
-uint8_t QwiicButton::writeDoubleRegister(QwiicButton_Register reg, uint16_t data){
-  _i2cPort->beginTransmission(_deviceAddress);
-  _i2cPort->write(reg);
-  _i2cPort->write(highByte(data));
-  _i2cPort->write(lowByte(data));
-  return (_i2cPort->endTransmission() != 0);
+bool QwiicButton::writeDoubleRegister(uint8_t reg, uint16_t data){
+    _i2cPort->beginTransmission(_deviceAddress);
+    _i2cPort->write(reg);
+    _i2cPort->write(highByte(data));
+    _i2cPort->write(lowByte(data));
+    return (_i2cPort->endTransmission() != 0);
 }
