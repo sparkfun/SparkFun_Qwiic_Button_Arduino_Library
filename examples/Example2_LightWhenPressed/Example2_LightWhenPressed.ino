@@ -18,6 +18,8 @@ Distributed as-is; no warranty is given.
 
 #include <SparkFun_Qwiic_Button.h>
 QwiicButton button;
+uint8_t brightness = 100;   //The brightness to set the LED to when the button is pushed
+                            //Can be any value between 0 (off) and 255 (max)
 
 void setup(){
     Serial.begin(115200);
@@ -35,18 +37,19 @@ void setup(){
         while(1);
     }
 
-    button.configLED(150, 1, 1000, 4000);
+    button.LEDoff();
 }
 
 void loop(){
     //check if button is pressed, and tell us if it is!
     if(button.isPressed()){
         Serial.println("The button is pressed!");
+        button.LEDon(brightness);
     }
 
     else {
         Serial.println("The button is not pressed.");
+        button.LEDoff();
     }
-    
     delay(20); //let's not hammer too hard on the I2C bus
 }

@@ -24,6 +24,7 @@ Distributed as-is; no warranty is given.
 
 #include <Wire.h>
 #include <Arduino.h>
+#include "registers.h"
 
 #define DEV_ADDR 0x5F //default device address of the QwiicButton
 #define DEV_ID_BTN 0x5D //device ID of the Qwiic Button
@@ -31,29 +32,6 @@ Distributed as-is; no warranty is given.
 
 class QwiicButton {
     private:
-    //Register Pointer Map:
-    const uint8_t ID = 0x00;
-    const uint8_t STATUS = 0x01;
-    const uint8_t FIRMWARE_MINOR = 0x02;
-    const uint8_t FIRMWARE_MAJOR = 0x03;
-    const uint8_t INTERRUPT_ENABLE = 0x04;
-    const uint8_t TIME_SINCE_LAST_BUTTON_PRESSED = 0x05;
-    const uint8_t TIME_SINCE_LAST_BUTTON_CLICKED = 0x07;
-    const uint8_t LED_BRIGHTNESS = 0x09;
-    const uint8_t LED_PULSE_GRANULARITY = 0x0A;
-    const uint8_t LED_PULSE_CYCLE_TIME = 0x0B;
-    const uint8_t LED_PULSE_OFF_TIME = 0x0D;
-    const uint8_t BUTTON_DEBOUNCE_TIME = 0x0F;
-    const uint8_t I2C_ADDRESS = 0x12;
-
-    //Status Register BitField
-    const uint8_t pressedBufferEmptyBit = 5;
-    const uint8_t pressedBufferFullBit = 4;
-    const uint8_t clickedBufferEmptyBit = 3;
-    const uint8_t clickedBufferFullBit = 2;
-    const uint8_t clickedBit = 1;
-    const uint8_t pressedBit = 0;
-
     TwoWire *_i2cPort;                                                //Generic connection to user's chosen I2C port
     uint8_t _deviceAddress;                                           //I2C address of the button/switch
 
@@ -68,16 +46,18 @@ class QwiicButton {
 
     //Button status
     bool isPressed();                                                 //Returns 1 if the button/switch is pressed, and 0 otherwise
-    bool isClicked();                                                 //Returns 1 if the button/switch is clicked, and 0 otherwise
+    bool hasBeenClicked();                                            //Returns 1 if the button/switch is clicked, and 0 otherwise
 
     //LED configuration
-    bool configLED(uint8_t brightness, uint8_t granularity,
+    bool LEDconfig(uint8_t brightness, uint8_t granularity,
         uint16_t cycleTime, uint16_t offTime);                        //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
+    bool LEDoff();                                                    //Turns the onboard LED off
+    bool LEDon(uint8_t brightness = 255);                             //Turns the onboard LED on with specified brightness. Set brightness to an integer between 0 and 255, where 0 is off and 255 is max brightness.
 
     //Internal I2C Abstraction
-    uint8_t readSingleRegister(uint8_t reg);                           //Reads a single 8-bit register.
-    uint16_t readDoubleRegister(uint8_t reg);                          //Reads a 16-bit register (little endian).
-    bool writeSingleRegister(uint8_t reg, uint8_t data);               //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
-    bool writeDoubleRegister(uint8_t reg, uint16_t data);              //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    uint8_t readSingleRegister(Qwiic_Button_Register reg);                           //Reads a single 8-bit register.
+    uint16_t readDoubleRegister(Qwiic_Button_Register reg);                          //Reads a 16-bit register (little endian).
+    bool writeSingleRegister(Qwiic_Button_Register reg, uint8_t data);               //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    bool writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data);              //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
 };
 #endif

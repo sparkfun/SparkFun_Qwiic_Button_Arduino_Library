@@ -71,16 +71,20 @@ uint16_t QwiicButton::getFirmwareVersion(){
 
 /*------------------------------ Button Status ---------------------- */
 bool QwiicButton::isPressed(){
-    return bitRead(readSingleRegister(STATUS), pressedBit);
+    statusRegisterBitField statusRegister;
+    statusRegister.byteWrapped = readSingleRegister(BUTTON_STATUS);
+    return statusRegister.isPressed;
 }
 
-bool QwiicButton::isClicked(){
-    return bitRead(readSingleRegister(STATUS), clickedBit);
+bool QwiicButton::hasBeenClicked(){
+    statusRegisterBitField statusRegister;
+    statusRegister.byteWrapped = readSingleRegister(BUTTON_STATUS);
+    return statusRegister.hasBeenClicked;
 }
 
 
 /*---------------------------- LED Configuration -------------------- */
-bool QwiicButton::configLED(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime){
+bool QwiicButton::LEDconfig(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime){
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
     success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
     success &= writeDoubleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
@@ -88,10 +92,18 @@ bool QwiicButton::configLED(uint8_t brightness, uint8_t granularity, uint16_t cy
     return success;
 }
 
+bool QwiicButton::LEDoff(){
+    return LEDconfig(0, 1, 0, 0);
+}
+
+bool QwiicButton::LEDon(uint8_t brightness){
+    return LEDconfig(brightness, 1, 0, 0);
+}
+
 
 /*------------------------- Internal I2C Abstraction ---------------- */
 
-uint8_t QwiicButton::readSingleRegister(uint8_t reg){
+uint8_t QwiicButton::readSingleRegister(Qwiic_Button_Register reg){
     _i2cPort->beginTransmission(DEV_ADDR);
     _i2cPort->write(reg);
     _i2cPort->endTransmission();
@@ -100,7 +112,7 @@ uint8_t QwiicButton::readSingleRegister(uint8_t reg){
     }
 }
 
-uint16_t QwiicButton::readDoubleRegister(uint8_t reg){
+uint16_t QwiicButton::readDoubleRegister(Qwiic_Button_Register reg){
     _i2cPort->beginTransmission(DEV_ADDR);
     _i2cPort->write(reg);
     _i2cPort->endTransmission();
@@ -112,14 +124,14 @@ uint16_t QwiicButton::readDoubleRegister(uint8_t reg){
     }
 }
 
-bool QwiicButton::writeSingleRegister(uint8_t reg, uint8_t data){
+bool QwiicButton::writeSingleRegister(Qwiic_Button_Register reg, uint8_t data){
     _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
     _i2cPort->write(data);
     return (_i2cPort->endTransmission() != 0);
 }
 
-bool QwiicButton::writeDoubleRegister(uint8_t reg, uint16_t data){
+bool QwiicButton::writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data){
     _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
     _i2cPort->write(lowByte(data));
