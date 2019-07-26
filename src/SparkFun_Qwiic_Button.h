@@ -44,9 +44,11 @@ class QwiicButton {
     uint8_t getDeviceType();                                          //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
     uint16_t getFirmwareVersion();                                    //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
 
-    //Button status
+    //Button status/config
     bool isPressed();                                                 //Returns 1 if the button/switch is pressed, and 0 otherwise
     bool hasBeenClicked();                                            //Returns 1 if the button/switch is clicked, and 0 otherwise
+    uint16_t getDebounceTime();                                       //Returns the time that the button waits for the mechanical contacts to settle, (in milliseconds).
+    uint8_t setDebounceTime(uint16_t time);                           //Sets the time that the button waits for the mechanical contacts to settle (in milliseconds) and checks if the register was set properly. Returns 0 on success, 1 on register I2C write fail, and 2 if the value didn't get written into the register properly.
 
     //LED configuration
     bool LEDconfig(uint8_t brightness, uint8_t granularity,
