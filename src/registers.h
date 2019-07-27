@@ -34,10 +34,10 @@ typedef union {
         bool pressedEnable : 1; //user mutable, set to 1 to enable an interrupt when the button is pressed. Defaults to 0.
         bool clickedEnable : 1; //user mutable, set to 1 to enable an interrupt when the button is clicked. Defaults to 0.
         bool logicLevel : 1; //user mutable, set to 0 for active low, set to 1 for active high. Defaults to 0.
-        bool status : 1; //user mutable, gets set to 1 when the interrupt is triggered. User is expected to write 0 to clear the interrrupt.
+        bool status : 1; //user mutable, gets set to 1 when the interrupt is triggered. User is expected to write 0 to clear the interrupt.
     };
     uint8_t byteWrapped;
-} interrruptConfigBitField;
+} interruptConfigBitField;
 
 typedef union {
     struct {

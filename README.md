@@ -9,7 +9,7 @@ This library allows the user to:
 * Determine whether or not the button/switch is pressed 
 * Set the brightness of the onboard LED
 * Configure the onboard LED's "breathing" effect
-* Use button-based interrrupts
+* Use button-based interrupts
 * Adjust the device's I<sup>2</sup>C address
 
 

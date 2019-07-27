@@ -87,13 +87,69 @@ uint16_t QwiicButton::getDebounceTime() {
 }
 
 uint8_t QwiicButton::setDebounceTime(uint16_t time) {
-    if(writeDoubleRegister(BUTTON_DEBOUNCE_TIME, time)) return 1;
-    if(getDebounceTime() != time) return 2;
-    return 0;
+    writeDoubleRegisterWithReadback(BUTTON_DEBOUNCE_TIME, time);
 }
 
 
-/*---------------------------- LED Configuration -------------------- */
+/*------------------- Interrupt Status/Configuration ---------------- */
+uint8_t QwiicButton::enablePressedInterrupt() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.pressedEnable = 1;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+uint8_t QwiicButton::disablePressedInterrupt() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.pressedEnable = 0;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+uint8_t QwiicButton::enableClickedInterrupt() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.clickedEnable = 1;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);  
+}
+
+uint8_t QwiicButton::disableClickedInterrupt() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.clickedEnable = 0;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+uint8_t QwiicButton::setInterruptLogicLevel(bool level){
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.logicLevel = level;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+bool QwiicButton::isInterruptTriggered() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    return interruptConfig.status;   
+}
+
+uint8_t QwiicButton::clearInterrupt() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfig.status = 0;
+    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+uint8_t QwiicButton::resetInterruptConfig() {
+    interruptConfigBitField interruptConfig;
+    interruptConfig.pressedEnable = 0;
+    interruptConfig.clickedEnable = 0;
+    interruptConfig.logicLevel = 0;
+    interruptConfig.status = 0;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+}
+
+/*------------------------ LED Configuration ------------------------ */
 bool QwiicButton::LEDconfig(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime) {
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
     success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
@@ -147,4 +203,16 @@ bool QwiicButton::writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data) 
     _i2cPort->write(lowByte(data));
     _i2cPort->write(highByte(data));
     return (_i2cPort->endTransmission() != 0);
+}
+
+uint8_t QwiicButton::writeSingleRegisterWithReadback(Qwiic_Button_Register reg, uint8_t data) {
+    if(writeSingleRegister(reg, data)) return 1;
+    if(readSingleRegister(reg) != data) return 2;
+    return 0;
+}
+
+uint16_t QwiicButton::writeDoubleRegisterWithReadback(Qwiic_Button_Register reg, uint16_t data) {
+    if(writeDoubleRegister(reg, data)) return 1;
+    if(readDoubleRegister(reg) != data) return 2;
+    return 0;
 }

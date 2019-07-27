@@ -50,6 +50,16 @@ class QwiicButton {
     uint16_t getDebounceTime();                                       //Returns the time that the button waits for the mechanical contacts to settle, (in milliseconds).
     uint8_t setDebounceTime(uint16_t time);                           //Sets the time that the button waits for the mechanical contacts to settle (in milliseconds) and checks if the register was set properly. Returns 0 on success, 1 on register I2C write fail, and 2 if the value didn't get written into the register properly.
 
+    //Interrupt status/config
+    uint8_t enablePressedInterrupt();                                 //When called, the interrupt will be configured to trigger when the button is pressed. If enableClickedInterrupt() has also been called, then the interrupt will trigger on either a push or a click.
+    uint8_t disablePressedInterrupt();                                //When called, the interrupt will no longer be configured to trigger when the button is pressed. If enableClickedInterrupt() has also been called, then the interrupt will still trigger on the button click.
+    uint8_t enableClickedInterrupt();                                 //When called, the interrupt will be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will trigger on either a push or a click.
+    uint8_t disableClickedInterrupt();                                //When called, the interrupt will no longer be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will still trigger on the button press.
+    uint8_t setInterruptLogicLevel(bool level);                       //Sets whether the interrupt output is active-low or active-high (defaults to active-low). Set to LOW for active-low, or HIGH for active-high.
+    bool isInterruptTriggered();                                      //Returns true if the interrupt has been triggered, false otherwise.
+    uint8_t clearInterrupt();                                         //Clears the interrupt flag on the button. Also resets the INT pin to whatever it's resting state is.
+    uint8_t resetInterruptConfig();                                   //Resets the interrupt configuration back to defaults.
+
     //LED configuration
     bool LEDconfig(uint8_t brightness, uint8_t granularity,
         uint16_t cycleTime, uint16_t offTime);                        //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
@@ -57,9 +67,11 @@ class QwiicButton {
     bool LEDon(uint8_t brightness = 255);                             //Turns the onboard LED on with specified brightness. Set brightness to an integer between 0 and 255, where 0 is off and 255 is max brightness.
 
     //Internal I2C Abstraction
-    uint8_t readSingleRegister(Qwiic_Button_Register reg);                           //Reads a single 8-bit register.
-    uint16_t readDoubleRegister(Qwiic_Button_Register reg);                          //Reads a 16-bit register (little endian).
-    bool writeSingleRegister(Qwiic_Button_Register reg, uint8_t data);               //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
-    bool writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data);              //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    uint8_t readSingleRegister(Qwiic_Button_Register reg);                              //Reads a single 8-bit register.
+    uint16_t readDoubleRegister(Qwiic_Button_Register reg);                             //Reads a 16-bit register (little endian).
+    bool writeSingleRegister(Qwiic_Button_Register reg, uint8_t data);                  //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    bool writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data);                 //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
+    uint8_t writeSingleRegisterWithReadback(Qwiic_Button_Register reg, uint8_t data);   //Writes data into a single 8-bit register, and checks to make sure that the data was written successfully. Returns 0 on no error, 1 on I2C write fail, and 2 if the register doesn't read back the same value that was written.
+    uint16_t writeDoubleRegisterWithReadback(Qwiic_Button_Register reg, uint16_t data); //Writes data into a double (two 8-bit) registers, and checks to make sure that the data was written successfully. Returns 0 on no error, 1 on I2C write fail, and 2 if the register doesn't read back the same value that was written.
 };
 #endif
