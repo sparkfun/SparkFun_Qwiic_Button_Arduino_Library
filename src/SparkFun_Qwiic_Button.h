@@ -55,8 +55,7 @@ class QwiicButton {
     uint8_t disablePressedInterrupt();                                //When called, the interrupt will no longer be configured to trigger when the button is pressed. If enableClickedInterrupt() has also been called, then the interrupt will still trigger on the button click.
     uint8_t enableClickedInterrupt();                                 //When called, the interrupt will be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will trigger on either a push or a click.
     uint8_t disableClickedInterrupt();                                //When called, the interrupt will no longer be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will still trigger on the button press.
-    uint8_t setInterruptLogicLevel(bool level);                       //Sets whether the interrupt output is active-low or active-high (defaults to active-low). Set to LOW for active-low, or HIGH for active-high.
-    bool isInterruptTriggered();                                      //Returns true if the interrupt has been triggered, false otherwise.
+    bool interruptTriggered();                                        //Returns true if the interrupt has been triggered, false otherwise.
     uint8_t clearInterrupt();                                         //Clears the interrupt flag on the button. Also resets the INT pin to whatever it's resting state is.
     uint8_t resetInterruptConfig();                                   //Resets the interrupt configuration back to defaults.
 

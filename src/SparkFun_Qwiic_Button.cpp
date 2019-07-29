@@ -120,14 +120,7 @@ uint8_t QwiicButton::disableClickedInterrupt() {
     writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
 }
 
-uint8_t QwiicButton::setInterruptLogicLevel(bool level){
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.logicLevel = level;
-    writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
-}
-
-bool QwiicButton::isInterruptTriggered() {
+bool QwiicButton::interruptTriggered() {
     interruptConfigBitField interruptConfig;
     interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
     return interruptConfig.status;   
@@ -144,7 +137,6 @@ uint8_t QwiicButton::resetInterruptConfig() {
     interruptConfigBitField interruptConfig;
     interruptConfig.pressedEnable = 0;
     interruptConfig.clickedEnable = 0;
-    interruptConfig.logicLevel = 0;
     interruptConfig.status = 0;
     return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
 }
