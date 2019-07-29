@@ -1,6 +1,6 @@
 /******************************************************************************
 Configures the button to raise an interrupt when pressed, and notifies us over
-serial.
+serial. Also allows us to enable/disable/reset the interrupt too!
 
 Fischer Moseley @ SparkFun Electronics
 Original Creation Date: July 29, 2019
@@ -34,11 +34,9 @@ void setup(){
         Serial.println("Device did not acknowledge! Freezing.");
         while(1);
     }
-    button.resetInterruptConfig();
-    button.enableClickedInterrupt();
-    button.LEDon();
-    delay(200);
-    button.LEDoff();
+
+    button.resetInterruptConfig(); //reset all the interrupt configuration stuff to defaults, so we have a clean slate to work with!
+    button.enablePressedInterrupt(); //configure the interrupt to trigger when we press the button
 }
 
 void loop(){
@@ -47,23 +45,23 @@ void loop(){
     }
 
     else {
-        Serial.println("interrupt not triggered");
+        Serial.println("Interrupt Not Triggered");
     }
 
     if(Serial.available()){
         uint8_t recieved = Serial.read();
-        if(recieved == 'r' || recieved == 'R') {
-            Serial.println("resetting interrupt");
+        if(recieved == 'r' || recieved == 'R') { //if the user has send either r or R over serial, then reset the interrupt!
+            Serial.println("Resetting Interrupt...");
             button.clearInterrupt();
         }
         if(recieved == 'd' || recieved == 'D') {
-            Serial.println("disabling interrupt");
-            button.disableClickedInterrupt();
+            Serial.println("Disabling Interrupt...");
+            button.disablePressedInterrupt();
         }
 
         if(recieved == 'e' || recieved == 'E') {
-            Serial.println("enabling interrupt");
-            button.enableClickedInterrupt();
+            Serial.println("Enabling Interrupt...");
+            button.enablePressedInterrupt();
         }
     }
     delay(20); //let's not hammer too hard on the I2C bus
