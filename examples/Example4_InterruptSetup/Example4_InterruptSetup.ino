@@ -66,5 +66,5 @@ void loop(){
             button.enableClickedInterrupt();
         }
     }
-    delay(100); //let's not hammer too hard on the I2C bus
+    delay(20); //let's not hammer too hard on the I2C bus
 }
