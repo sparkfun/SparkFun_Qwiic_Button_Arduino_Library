@@ -64,11 +64,13 @@ class QwiicButton {
     bool isPressedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
     unsigned long timeSinceLastPress();                         //Returns how many milliseconds it has been since the last button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
     unsigned long timeSinceFirstPress();                        //Returns how many milliseconds it has been since the first button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long popPressedQueue();                            //Returns the oldest value in the queue (milliseconds since first button press), and then removes it.
 
     bool isClickedQueueFull();                                  //Returns true if the queue of button click timestamps is full, and false otherwise.
     bool isClickedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
     unsigned long timeSinceLastClick();                         //Returns how many milliseconds it has been since the last button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days. 
     unsigned long timeSinceFirstClick();                        //Returns how many milliseconds it has been since the first button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long popClickedQueue();                            //Returns the oldest value in the queue (milliseconds since first button click), and then removes it.
 
     //LED configuration
     bool LEDconfig(uint8_t brightness, uint8_t granularity,

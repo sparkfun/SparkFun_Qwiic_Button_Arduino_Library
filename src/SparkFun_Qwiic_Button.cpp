@@ -164,6 +164,15 @@ unsigned long QwiicButton::timeSinceFirstPress() {
     return readQuadRegister(PRESSED_QUEUE_BACK);
 }
 
+unsigned long QwiicButton::popPressedQueue() {
+    unsigned long tempData = timeSinceFirstPress();
+    queueStatusBitField pressedQueueStatus;
+    pressedQueueStatus.byteWrapped = readSingleRegister(PRESSED_QUEUE_STATUS);
+    pressedQueueStatus.popRequest = 1;
+    writeSingleRegister(PRESSED_QUEUE_STATUS, pressedQueueStatus.byteWrapped);
+    return tempData;
+}
+
 
 //clicked queue manipulation
 bool QwiicButton::isClickedQueueFull() {
@@ -184,6 +193,15 @@ unsigned long QwiicButton::timeSinceLastClick() {
 
 unsigned long QwiicButton::timeSinceFirstClick() {
     return readQuadRegister(CLICKED_QUEUE_BACK);
+}
+
+unsigned long QwiicButton::popClickedQueue() {
+    unsigned long tempData = timeSinceFirstClick();
+    queueStatusBitField clickedQueueStatus;
+    clickedQueueStatus.byteWrapped = readSingleRegister(CLICKED_QUEUE_STATUS);
+    clickedQueueStatus.popRequest = 1;
+    writeSingleRegister(CLICKED_QUEUE_STATUS, clickedQueueStatus.byteWrapped);
+    return tempData;
 }
 
 
