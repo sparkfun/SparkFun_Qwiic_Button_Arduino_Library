@@ -141,6 +141,52 @@ uint8_t QwiicButton::resetInterruptConfig() {
     return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
 }
 
+
+/*------------------------- Queue Manipulation ---------------------- */
+//pressed queue manipulation
+bool QwiicButton::isPressedQueueFull() {
+    queueStatusBitField pressedQueueStatus;
+    pressedQueueStatus.byteWrapped = readSingleRegister(PRESSED_QUEUE_STATUS);
+    return pressedQueueStatus.isFull;    
+}
+
+bool QwiicButton::isPressedQueueEmpty() {
+    queueStatusBitField pressedQueueStatus;
+    pressedQueueStatus.byteWrapped = readSingleRegister(PRESSED_QUEUE_STATUS);
+    return pressedQueueStatus.isEmpty;
+}
+
+unsigned long QwiicButton::timeSinceLastPress() {
+    return readQuadRegister(PRESSED_QUEUE_FRONT);
+}
+
+unsigned long QwiicButton::timeSinceFirstPress() {
+    return readQuadRegister(PRESSED_QUEUE_BACK);
+}
+
+
+//clicked queue manipulation
+bool QwiicButton::isClickedQueueFull() {
+    queueStatusBitField clickedQueueStatus;
+    clickedQueueStatus.byteWrapped = readSingleRegister(CLICKED_QUEUE_STATUS);
+    return clickedQueueStatus.isFull;    
+}
+
+bool QwiicButton::isClickedQueueEmpty() {
+    queueStatusBitField clickedQueueStatus;
+    clickedQueueStatus.byteWrapped = readSingleRegister(CLICKED_QUEUE_STATUS);
+    return clickedQueueStatus.isEmpty;
+}
+
+unsigned long QwiicButton::timeSinceLastClick() {
+    return readQuadRegister(CLICKED_QUEUE_FRONT);
+}
+
+unsigned long QwiicButton::timeSinceFirstClick() {
+    return readQuadRegister(CLICKED_QUEUE_BACK);
+}
+
+
 /*------------------------ LED Configuration ------------------------ */
 bool QwiicButton::LEDconfig(uint8_t brightness, uint8_t granularity, uint16_t cycleTime, uint16_t offTime) {
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
@@ -162,24 +208,42 @@ bool QwiicButton::LEDon(uint8_t brightness) {
 /*------------------------- Internal I2C Abstraction ---------------- */
 
 uint8_t QwiicButton::readSingleRegister(Qwiic_Button_Register reg) {
-    _i2cPort->beginTransmission(DEV_ADDR);
+    _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
     _i2cPort->endTransmission();
-    if(_i2cPort->requestFrom(DEV_ADDR, 1) != 0){
-    return _i2cPort->read();     
+    if(_i2cPort->requestFrom(_deviceAddress, 1) != 0){
+        return _i2cPort->read();     
     }
 }
 
 uint16_t QwiicButton::readDoubleRegister(Qwiic_Button_Register reg) { //little endian
-    _i2cPort->beginTransmission(DEV_ADDR);
+    _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
     _i2cPort->endTransmission();
-
-    if(_i2cPort->requestFrom(DEV_ADDR, 2) != 0){
-    uint16_t data = _i2cPort->read();
-    data |= (_i2cPort->read() << 8);
-    return data;
+    if(_i2cPort->requestFrom(_deviceAddress, 2) != 0){
+        uint16_t data = _i2cPort->read();
+        data |= (_i2cPort->read() << 8);
+        return data;
     }
+}
+
+unsigned long QwiicButton::readQuadRegister(Qwiic_Button_Register reg) {
+    _i2cPort->beginTransmission(_deviceAddress);
+    _i2cPort->write(reg);
+    _i2cPort->endTransmission();
+    
+    union databuffer {
+        uint8_t array[4];
+        unsigned long integer;
+    };
+
+    databuffer data;
+    if(_i2cPort->requestFrom(_deviceAddress, 4) != 0) {
+        for(uint8_t i = 0; i < 4; i++) {
+            data.array[i] = _i2cPort->read();           
+        }
+    }
+    return data.integer;
 }
 
 bool QwiicButton::writeSingleRegister(Qwiic_Button_Register reg, uint8_t data) {

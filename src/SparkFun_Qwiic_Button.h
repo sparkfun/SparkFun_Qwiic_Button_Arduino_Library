@@ -59,6 +59,17 @@ class QwiicButton {
     uint8_t clearInterrupt();                                         //Clears the interrupt flag on the button. Also resets the INT pin to whatever it's resting state is.
     uint8_t resetInterruptConfig();                                   //Resets the interrupt configuration back to defaults.
 
+    //Queue manipulation
+    bool isPressedQueueFull();                                  //Returns true if the queue of button press timestamps is full, and false otherwise.
+    bool isPressedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
+    unsigned long timeSinceLastPress();                         //Returns how many milliseconds it has been since the last button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long timeSinceFirstPress();                        //Returns how many milliseconds it has been since the first button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+
+    bool isClickedQueueFull();                                  //Returns true if the queue of button click timestamps is full, and false otherwise.
+    bool isClickedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
+    unsigned long timeSinceLastClick();                         //Returns how many milliseconds it has been since the last button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days. 
+    unsigned long timeSinceFirstClick();                        //Returns how many milliseconds it has been since the first button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+
     //LED configuration
     bool LEDconfig(uint8_t brightness, uint8_t granularity,
         uint16_t cycleTime, uint16_t offTime);                        //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
@@ -68,6 +79,7 @@ class QwiicButton {
     //Internal I2C Abstraction
     uint8_t readSingleRegister(Qwiic_Button_Register reg);                              //Reads a single 8-bit register.
     uint16_t readDoubleRegister(Qwiic_Button_Register reg);                             //Reads a 16-bit register (little endian).
+    unsigned long readQuadRegister(Qwiic_Button_Register reg);                          //Reads a 32-bit register (little endian).
     bool writeSingleRegister(Qwiic_Button_Register reg, uint8_t data);                  //Attempts to write data into a single 8-bit register. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
     bool writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data);                 //Attempts to write data into a double (two 8-bit) registers. Does not check to make sure it was written successfully. Returns 0 if there wasn't an error on I2C transmission, and 1 otherwise.
     uint8_t writeSingleRegisterWithReadback(Qwiic_Button_Register reg, uint8_t data);   //Writes data into a single 8-bit register, and checks to make sure that the data was written successfully. Returns 0 on no error, 1 on I2C write fail, and 2 if the register doesn't read back the same value that was written.
