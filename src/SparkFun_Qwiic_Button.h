@@ -26,7 +26,7 @@ Distributed as-is; no warranty is given.
 #include <Arduino.h>
 #include "registers.h"
 
-#define DEV_ADDR 0x5F //default device address of the QwiicButton
+#define DEV_ADDR 0x60 //default device address of the QwiicButton
 #define DEV_ID_BTN 0x5D //device ID of the Qwiic Button
 #define DEV_ID_SW 0x5E //device ID of the Qwiic Switch
 
@@ -43,6 +43,7 @@ class QwiicButton {
     bool checkDeviceID();                                             //Returns true if the device ID matches that of either the button or the switch
     uint8_t getDeviceType();                                          //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
     uint16_t getFirmwareVersion();                                    //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
+    bool setI2Caddress(uint8_t address);                               //Configures the attached device to attach to the I2C bus using the specified address
 
     //Button status/config
     bool isPressed();                                                 //Returns 1 if the button/switch is pressed, and 0 otherwise

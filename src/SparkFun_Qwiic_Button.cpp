@@ -56,7 +56,7 @@ bool QwiicButton::checkDeviceID() {
 uint8_t QwiicButton::getDeviceType() {
     if(isConnected()){ //only try to get the device ID if the device will acknowledge
         uint8_t id = deviceID();
-        if(id == DEV_ID_BTN) return 1; //
+        if(id == DEV_ID_BTN) return 1;
         if(id == DEV_ID_SW) return 2;
     }
     return 0;
@@ -66,6 +66,21 @@ uint16_t QwiicButton::getFirmwareVersion() {
     uint16_t version = (readSingleRegister(FIRMWARE_MAJOR)) << 8;
     version |= readSingleRegister(FIRMWARE_MINOR);
     return version;
+}
+
+bool QwiicButton::setI2Caddress(uint8_t address) {
+    if(address < 0x08 || address > 0x77) return 1; //error immediately if the address is out of legal range
+
+    bool success = writeSingleRegister(I2C_ADDRESS, address);
+
+    if (success) {
+        _deviceAddress = address;
+        return 0; //return 0 if the write was successful, and after the struct's _deviceAddress variable was changed
+    }
+
+    else {
+        return 1; //otherwise just return error
+    }
 }
 
 
