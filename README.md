@@ -1,8 +1,8 @@
 SparkFun Qwiic Button Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
 ========================================
 
-![SparkFun Qwiic Switch](https://media3.giphy.com/media/QDRJ6IJzFSR1K/giphy.gif?cid=790b76115d3890a136502f784580e010&rid=giphy.gif)
-![SparkFun Qwiic Button](https://media0.giphy.com/media/RhrAmVUHxjTQvEPBWi/giphy.gif?cid=790b76115d38873050324a712e8e4c84&rid=giphy.gif)
+![SparkFun Qwiic Switch](https://gfycat.com/heartfeltglamorousazurewingedmagpie.gif)
+![SparkFun Qwiic Button](https://media0.giphy.com/media/RhrAmVUHxjTQvEPBWi/giphy.gif)
 
 This library allows the user to:
 
@@ -31,8 +31,10 @@ Documentation
 Products that use this Library 
 ---------------------------------
 
-* [*SPX-31416*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-* [*SPX-27183*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+* [*SPX-15584*](https://www.sparkfun.com/products/15584)
+* [*SPX-15585*](https://www.sparkfun.com/products/15585)
+* [*SPX-15586*](https://www.sparkfun.com/products/15586)
+* [*SPX-15587*](https://www.sparkfun.com/products/15587)
 
 Version History
 ---------------
