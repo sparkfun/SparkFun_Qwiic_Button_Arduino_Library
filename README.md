@@ -1,8 +1,8 @@
 SparkFun Qwiic Button Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
 ========================================
 
-![SparkFun Qwiic Switch](https://media3.giphy.com/media/QDRJ6IJzFSR1K/giphy.gif?cid=790b76115d3890a136502f784580e010&rid=giphy.gif)
-![SparkFun Qwiic Button](https://media0.giphy.com/media/RhrAmVUHxjTQvEPBWi/giphy.gif?cid=790b76115d38873050324a712e8e4c84&rid=giphy.gif)
+![SparkFun Qwiic Switch](https://gfycat.com/heartfeltglamorousazurewingedmagpie.gif)
+![SparkFun Qwiic Button](https://media0.giphy.com/media/RhrAmVUHxjTQvEPBWi/giphy.gif)
 
 This library allows the user to:
 
