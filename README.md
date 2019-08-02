@@ -31,8 +31,10 @@ Documentation
 Products that use this Library 
 ---------------------------------
 
-* [*SPX-31416*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-* [*SPX-27183*](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+* [*SPX-15584*](https://www.sparkfun.com/products/15584)
+* [*SPX-15585*](https://www.sparkfun.com/products/15585)
+* [*SPX-15586*](https://www.sparkfun.com/products/15586)
+* [*SPX-15587*](https://www.sparkfun.com/products/15587)
 
 Version History
 ---------------
