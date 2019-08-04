@@ -29,22 +29,47 @@ script:
   #compile for arduino AVR
   - echo Compiling for Arduino AVR...
   - arduino --verify --board arduino:avr:uno $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example4_InterruptSetup/Example4_InterruptSetup.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example5_QueueUsage/Example5_QueueUsage.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example6_ChangeI2CAddress/Example6_ChangeI2CAddress.ino
 
   #compile for arduino SAMD
   - echo Compiling for Arduino SAMD...
   - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example4_InterruptSetup/Example4_InterruptSetup.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example5_QueueUsage/Example5_QueueUsage.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example6_ChangeI2CAddress/Example6_ChangeI2CAddress.ino
 
   #compile for SparkFun AVR
   - echo Compiling for SparkFun AVR...
   - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example4_InterruptSetup/Example4_InterruptSetup.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example5_QueueUsage/Example5_QueueUsage.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example6_ChangeI2CAddress/Example6_ChangeI2CAddress.ino
 
   #compile for SparkFun SAMD
   - echo Compiling for SparkFun SAMD...
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example4_InterruptSetup/Example4_InterruptSetup.ino
+  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example5_QueueUsage/Example5_QueueUsage.ino
+  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example6_ChangeI2CAddress/Example6_ChangeI2CAddress.ino
 
   #compile for SparkFun Artemis
   - echo Compiling for SparkFun Artemis...
   - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example4_InterruptSetup/Example4_InterruptSetup.ino
+  - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example5_QueueUsage/Example5_QueueUsage.ino
+  - arduino --verify --board SparkFun:apollo3:amap3blackboard $PWD/examples/Example6_ChangeI2CAddress/Example6_ChangeI2CAddress.ino
 
 notifications:
   email:
