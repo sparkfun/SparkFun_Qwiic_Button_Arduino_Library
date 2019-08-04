@@ -13,7 +13,7 @@ Development environment specifics:
 	Qwiic Button Breakout Version: 1.0.0
     Qwiic Switch Breakout Version: 1.0.0
 
-This code is beerware; if you see me (or any other SparkFun employee) at the
+This code is Lemonadeware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!
 
 Distributed as-is; no warranty is given.
@@ -26,9 +26,10 @@ Distributed as-is; no warranty is given.
 #include <Arduino.h>
 #include "registers.h"
 
-#define DEV_ADDR 0x60 //default device address of the QwiicButton
-#define DEV_ID_BTN 0x5D //device ID of the Qwiic Button
-#define DEV_ID_SW 0x5E //device ID of the Qwiic Switch
+#define DEFAULT_BUTTON_ADDRESS 0x60 //default I2C address of the button
+#define DEFAULT_SWITCH_ADDRESS 0x46 //default I2C address of the switch
+#define DEV_ID_BTN 0x5D             //device ID of the Qwiic Button
+#define DEV_ID_SW 0x5E              //device ID of the Qwiic Switch
 
 class QwiicButton {
     private:
@@ -37,13 +38,14 @@ class QwiicButton {
 
     public:
     //Device status
-    bool begin(uint8_t address = DEV_ADDR, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies. 
+    bool begin(uint8_t address, TwoWire &wirePort = Wire);            //Sets device I2C address to a user-specified address, over whatever port the user specifies. 
     bool isConnected();                                               //Returns true if the button/switch will acknowledge over I2C, and false otherwise
     uint8_t deviceID();                                               //Return the 8-bit device ID of the attached device.
     bool checkDeviceID();                                             //Returns true if the device ID matches that of either the button or the switch
     uint8_t getDeviceType();                                          //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
     uint16_t getFirmwareVersion();                                    //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
-    bool setI2Caddress(uint8_t address);                               //Configures the attached device to attach to the I2C bus using the specified address
+    bool setI2Caddress(uint8_t address);                              //Configures the attached device to attach to the I2C bus using the specified address
+    uint8_t getI2Caddress();                                          //Returns the I2C address of the device.
 
     //Button status/config
     bool isPressed();                                                 //Returns 1 if the button/switch is pressed, and 0 otherwise
@@ -61,21 +63,21 @@ class QwiicButton {
     uint8_t resetInterruptConfig();                                   //Resets the interrupt configuration back to defaults.
 
     //Queue manipulation
-    bool isPressedQueueFull();                                  //Returns true if the queue of button press timestamps is full, and false otherwise.
-    bool isPressedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
-    unsigned long timeSinceLastPress();                         //Returns how many milliseconds it has been since the last button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
-    unsigned long timeSinceFirstPress();                        //Returns how many milliseconds it has been since the first button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
-    unsigned long popPressedQueue();                            //Returns the oldest value in the queue (milliseconds since first button press), and then removes it.
+    bool isPressedQueueFull();                                        //Returns true if the queue of button press timestamps is full, and false otherwise.
+    bool isPressedQueueEmpty();                                       //Returns true if the queue of button press timestamps is empty, and false otherwise.
+    unsigned long timeSinceLastPress();                               //Returns how many milliseconds it has been since the last button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long timeSinceFirstPress();                              //Returns how many milliseconds it has been since the first button press. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long popPressedQueue();                                  //Returns the oldest value in the queue (milliseconds since first button press), and then removes it.
 
-    bool isClickedQueueFull();                                  //Returns true if the queue of button click timestamps is full, and false otherwise.
-    bool isClickedQueueEmpty();                                 //Returns true if the queue of button press timestamps is empty, and false otherwise.
-    unsigned long timeSinceLastClick();                         //Returns how many milliseconds it has been since the last button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days. 
-    unsigned long timeSinceFirstClick();                        //Returns how many milliseconds it has been since the first button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
-    unsigned long popClickedQueue();                            //Returns the oldest value in the queue (milliseconds since first button click), and then removes it.
+    bool isClickedQueueFull();                                        //Returns true if the queue of button click timestamps is full, and false otherwise.
+    bool isClickedQueueEmpty();                                       //Returns true if the queue of button press timestamps is empty, and false otherwise.
+    unsigned long timeSinceLastClick();                               //Returns how many milliseconds it has been since the last button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days. 
+    unsigned long timeSinceFirstClick();                              //Returns how many milliseconds it has been since the first button click. Since this returns a 32-bit unsigned int, it will roll over about every 50 days.
+    unsigned long popClickedQueue();                                  //Returns the oldest value in the queue (milliseconds since first button click), and then removes it.
 
     //LED configuration
-    bool LEDconfig(uint8_t brightness, uint8_t granularity,
-        uint16_t cycleTime, uint16_t offTime);                        //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
+    bool LEDconfig(uint8_t brightness, uint16_t cycleTime,
+        uint16_t offTime, uint8_t granularity = 1);                   //Configures the LED with the given max brightness, granularity (1 is fine for most applications), cycle time, and off time. 
     bool LEDoff();                                                    //Turns the onboard LED off
     bool LEDon(uint8_t brightness = 255);                             //Turns the onboard LED on with specified brightness. Set brightness to an integer between 0 and 255, where 0 is off and 255 is max brightness.
 

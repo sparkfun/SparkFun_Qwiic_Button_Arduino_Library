@@ -1,11 +1,10 @@
 /******************************************************************************
-Checks whether the button is pressed, and light it up if it is! Also prints
-status to the serial monitor.
+Turns on the Button's built in LED when pressed, and prints status over Serial!
 
 Fischer Moseley @ SparkFun Electronics
 Original Creation Date: July 24, 2019
 
-This code is beerware; if you see me (or any other SparkFun employee) at the
+This code is Lemonadeware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!
 
 Hardware Connections:
@@ -24,8 +23,9 @@ uint8_t brightness = 100;   //The brightness to set the LED to when the button i
 void setup(){
     Serial.begin(115200);
     Wire.begin(); //Join I2C bus
-    Wire.setClock(400000);
-    button.begin();
+    Wire.setClock(400000); //Set the I2C clock speed to 400kHz
+    button.begin(DEFAULT_BUTTON_ADDRESS); // Initialize our button! Set to DEFAULT_SWITCH_ADDRESS if you're using a
+                                          // switch, or whatever the I2C address of your device is
 
     //check if button will acknowledge over I2C
     if(button.isConnected()){
@@ -51,5 +51,5 @@ void loop(){
         Serial.println("The button is not pressed.");
         button.LEDoff();
     }
-    delay(20); //let's not hammer too hard on the I2C bus
+    delay(20); //Don't hammer too hard on the I2C bus
 }

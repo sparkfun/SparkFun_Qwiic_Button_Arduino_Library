@@ -1,3 +1,25 @@
+/******************************************************************************
+registers.h
+Fischer Moseley @ SparkFun Electronics
+Original Creation Date: July 24, 2019
+
+This file defines the virtual memory map on the Qwiic Button/Switch. The enum
+provides a set of pointers for the various registers on the Qwiic
+Button/Switch, and the unions wrap the various bits in the bitfield in an easy
+to use uint8_t format
+
+Development environment specifics:
+	IDE: Arduino 1.8.9
+	Hardware Platform: Arduino Uno/SparkFun Redboard
+	Qwiic Button Version: 1.0.0
+    Qwiic Switch Version: 1.0.0
+
+This code is Lemonadeware; if you see me (or any other SparkFun employee) at the
+local, and you've found our code helpful, please buy us a round!
+
+Distributed as-is; no warranty is given.
+******************************************************************************/
+
 //Register Pointer Map
 enum Qwiic_Button_Register: uint8_t {
     BUTTON_STATUS = 0x00,

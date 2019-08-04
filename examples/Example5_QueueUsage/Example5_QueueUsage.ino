@@ -1,11 +1,11 @@
 /******************************************************************************
 Configures the button to raise an interrupt when pressed, and notifies us over
-serial. Also allows us to enable/disable/reset the interrupt too!
+serial. Allows us to enable/disable/reset the interrupt too!
 
 Fischer Moseley @ SparkFun Electronics
 Original Creation Date: July 29, 2019
 
-This code is beerware; if you see me (or any other SparkFun employee) at the
+This code is Lemonadeware; if you see me (or any other SparkFun employee) at the
 local, and you've found our code helpful, please buy us a round!
 
 Hardware Connections:
@@ -22,8 +22,9 @@ QwiicButton button;
 void setup(){
     Serial.begin(115200);
     Wire.begin(); //Join I2C bus
-    Wire.setClock(400000);
-    button.begin();
+    Wire.setClock(400000); //Set I2C clock speed to 400kHz
+    button.begin(DEFAULT_BUTTON_ADDRESS); // Initialize our button! Set to DEFAULT_SWITCH_ADDRESS if you're using a
+                                          // switch, or whatever the I2C address of your device is
 
     //check if button will acknowledge over I2C
     if(button.isConnected()){
@@ -37,34 +38,42 @@ void setup(){
 }
 
 void loop(){
-    if(button.isPressedQueueEmpty() == false) {
+    if(button.isPressedQueueEmpty() == false) { //if the queue of pressed events is not empty
+        //then print the time since the last and first button press
         Serial.print(button.timeSinceLastPress()/1000.0);
         Serial.print("s since the button was last pressed   ");
         Serial.print(button.timeSinceFirstPress()/1000.0);
         Serial.print("s since the button was first pressed   ");
     }
     
-    if(button.isPressedQueueEmpty() == true) Serial.print("ButtonPressed Queue is empty! ");
+    //if the queue of pressed events is empty, just print that the queue is empty!
+    if(button.isPressedQueueEmpty() == true) {
+        Serial.print("ButtonPressed Queue is empty! ");
+    } 
 
-    if(button.isClickedQueueEmpty() == false){
+    if(button.isClickedQueueEmpty() == false) { //if the queue of clicked events is not empty
+        //then print the time since the last and first button click
         Serial.print(button.timeSinceLastClick()/1000.0);
         Serial.print("s since the button was last clicked   ");
         Serial.print(button.timeSinceFirstClick()/1000.0);
         Serial.print("s since the button was first clicked");
     }
+    //if the queue of clicked events is empty, just print that the queue is empty!
+    if(button.isPressedQueueEmpty() == true) {
+        Serial.print("  ButtonClicked Queue is empty!");
+    }
 
-    if(button.isPressedQueueEmpty() == true) Serial.print("  ButtonClicked Queue is empty!");
-    Serial.println();
+    Serial.println(); //print a new line to not clutter up the serial monitor
 
-    if(Serial.available()) {
+    if(Serial.available()) { //if the user sent a character
         
         uint8_t data = Serial.read();
-        if(data == 'p' || data == 'P') {
+        if(data == 'p' || data == 'P') { //if the character is p or P, then pop a value off of the pressed Queue
             button.popPressedQueue();
             Serial.println("Popped PressedQueue!");
         }
 
-        if(data == 'c' || data == 'C') {
+        if(data == 'c' || data == 'C') { //if the character is c or C, then pop a value off of the pressed Queue
             button.popClickedQueue();
             Serial.println("Popped ClickedQueue!");
         }
