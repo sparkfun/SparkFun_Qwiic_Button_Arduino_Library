@@ -38,7 +38,8 @@ Products that use this Library
 Version History
 ---------------
 
-* [v1.0.0](https://www.youtube.com/watch?v=dQw4w9WgXcQ) - Initial Public release.
+* [v1.0.1](https://github.com/sparkfun/SparkFun_Qwiic_Button_Arduino_Library/releases/tag/v1.0.1) - Arduino Library Specification Compliance
+* [v1.0.0](https://github.com/sparkfun/SparkFun_Qwiic_Button_Arduino_Library/releases/tag/v1.0.0) - Initial Public release.
 
 License Information
 -------------------
