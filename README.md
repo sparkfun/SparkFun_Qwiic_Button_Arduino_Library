@@ -1,4 +1,4 @@
-SparkFun Qwiic Button Arduino Library <ADD TRAVISCI TAG HERE WHEN REPO BECOMES PUBLIC>
+SparkFun Qwiic Button Arduino Library [![Build Status](https://travis-ci.org/sparkfun/SparkFun_Qwiic_Button_Arduino_Library.svg?branch=master)](https://travis-ci.org/sparkfun/SparkFun_Qwiic_Button_Arduino_Library)
 ========================================
 
 ![SparkFun Qwiic Button](https://cdn.sparkfun.com//assets/parts/1/4/1/9/0/15584-Qwiic_Button_-_Red-01.jpg)
