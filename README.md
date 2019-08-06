@@ -47,8 +47,9 @@ Products that use this Library
 
 * [*SPX-15584*](https://www.sparkfun.com/products/15584)
 * [*SPX-15585*](https://www.sparkfun.com/products/15585)
+* [*SPX-15591*](https://www.sparkfun.com/products/15591)
+* [*SPX-15592*](https://www.sparkfun.com/products/15592)
 * [*SPX-15586*](https://www.sparkfun.com/products/15586)
-* [*SPX-15587*](https://www.sparkfun.com/products/15587)
 
 Version History
 ---------------
