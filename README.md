@@ -39,8 +39,8 @@ Documentation
 --------------
 
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
-* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun Qwiic Switch.
-* **[Product Repository](https://www.youtube.com/watch?v=dQw4w9WgXcQ)** - Main repository (including hardware files) for the SparkFun Qwiic Button.
+* **[Product Repository](https://github.com/sparkfunX/Qwiic_Switch)** - Main repository (including hardware files) for the SparkFun Qwiic Switch.
+* **[Product Repository](https://github.com/sparkfunX/Qwiic_Button)** - Main repository (including hardware files) for the SparkFun Qwiic Button.
 
 Products that use this Library 
 ---------------------------------
