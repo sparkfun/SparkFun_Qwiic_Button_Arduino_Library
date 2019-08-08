@@ -74,7 +74,7 @@ void loop() {
 
     //Read the buffer and parse it for a valid hex address
     String stringBuffer = Serial.readStringUntil('\r');
-    uint8_t charBuffer[10];
+    char charBuffer[10];
     stringBuffer.toCharArray(charBuffer, 10);
     uint8_t newAddress = 0;
     uint8_t success = sscanf(charBuffer, "%x", &newAddress);
