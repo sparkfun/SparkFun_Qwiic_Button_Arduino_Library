@@ -26,10 +26,13 @@ Distributed as-is; no warranty is given.
 #include <Arduino.h>
 #include "registers.h"
 
-#define DEFAULT_BUTTON_ADDRESS 0x6F //default I2C address of the button
-#define DEFAULT_SWITCH_ADDRESS 0x46 //default I2C address of the switch
-#define DEV_ID_BTN 0x5D             //device ID of the Qwiic Button
-#define DEV_ID_SW 0x5E              //device ID of the Qwiic Switch
+// #define DEFAULT_BUTTON_ADDRESS 0x6F //default I2C address of the button
+// #define DEFAULT_SWITCH_ADDRESS 0x46 //default I2C address of the switch
+// #define DEV_ID_BTN 0x5D             //device ID of the Qwiic Button
+// #define DEV_ID_SW 0x5E              //device ID of the Qwiic Switch
+
+#define DEFAULT_ADDRESS 0x6F //default I2C address of the button
+#define DEV_ID 0x5D          //device ID of the Qwiic Button
 
 class QwiicButton
 {

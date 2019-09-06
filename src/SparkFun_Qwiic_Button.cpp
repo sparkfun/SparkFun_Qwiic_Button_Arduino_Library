@@ -51,7 +51,8 @@ uint8_t QwiicButton::deviceID()
 
 bool QwiicButton::checkDeviceID()
 {
-    return ((deviceID() == DEV_ID_SW) || (deviceID() == DEV_ID_BTN)); //Return true if the device ID matches either the button or the switch
+    // return ((deviceID() == DEV_ID_SW) || (deviceID() == DEV_ID_BTN)); //Return true if the device ID matches either the button or the switch
+    return (deviceID() == DEV_ID); //Return true if the device ID matches
 }
 
 uint8_t QwiicButton::getDeviceType()
@@ -59,10 +60,10 @@ uint8_t QwiicButton::getDeviceType()
     if (isConnected())
     { //only try to get the device ID if the device will acknowledge
         uint8_t id = deviceID();
-        if (id == DEV_ID_BTN)
+        if (id == DEV_ID)
             return 1;
-        if (id == DEV_ID_SW)
-            return 2;
+        // if (id == DEV_ID_SW)
+        //     return 2;
     }
     return 0;
 }
@@ -160,6 +161,7 @@ bool QwiicButton::interruptTriggered()
 {
     interruptConfigBitField interruptConfig;
     interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    Serial.print("1");
     return interruptConfig.status;
 }
 
