@@ -42,14 +42,14 @@ private:
 
 public:
     //Device status
-    bool begin(uint8_t address, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies.
-    bool isConnected();                                    //Returns true if the button/switch will acknowledge over I2C, and false otherwise
-    uint8_t deviceID();                                    //Return the 8-bit device ID of the attached device.
-    bool checkDeviceID();                                  //Returns true if the device ID matches that of either the button or the switch
-    uint8_t getDeviceType();                               //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
-    uint16_t getFirmwareVersion();                         //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
-    bool setI2Caddress(uint8_t address);                   //Configures the attached device to attach to the I2C bus using the specified address
-    uint8_t getI2Caddress();                               //Returns the I2C address of the device.
+    bool begin(uint8_t address = DEFAULT_ADDRESS, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies.
+    bool isConnected();                                                      //Returns true if the button/switch will acknowledge over I2C, and false otherwise
+    uint8_t deviceID();                                                      //Return the 8-bit device ID of the attached device.
+    bool checkDeviceID();                                                    //Returns true if the device ID matches that of either the button or the switch
+    uint8_t getDeviceType();                                                 //Returns 1 if a button is attached, 2 if a switch is attached. Returns 0 if there is no device attached.
+    uint16_t getFirmwareVersion();                                           //Returns the firmware version of the attached device as a 16-bit integer. The leftmost (high) byte is the major revision number, and the rightmost (low) byte is the minor revision number.
+    bool setI2Caddress(uint8_t address);                                     //Configures the attached device to attach to the I2C bus using the specified address
+    uint8_t getI2Caddress();                                                 //Returns the I2C address of the device.
 
     //Button status/config
     bool isPressed();                       //Returns 1 if the button/switch is pressed, and 0 otherwise

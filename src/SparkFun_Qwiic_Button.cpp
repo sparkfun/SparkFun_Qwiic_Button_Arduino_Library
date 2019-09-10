@@ -85,16 +85,16 @@ bool QwiicButton::setI2Caddress(uint8_t address)
 
     bool success = writeSingleRegister(I2C_ADDRESS, address);
 
-    if (success)
+    if (success == true)
     {
         _deviceAddress = address;
-        return 0; //return 0 if the write was successful, and after the struct's _deviceAddress variable was changed
+        return true;
     }
 
     else
     {
         Serial.println("Error2");
-        return 1; //otherwise just return error
+        return false;
     }
 }
 
@@ -262,19 +262,9 @@ unsigned long QwiicButton::popClickedQueue()
 bool QwiicButton::LEDconfig(uint8_t brightness, uint16_t cycleTime, uint16_t offTime, uint8_t granularity)
 {
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
-    Serial.print("Success: ");
-    Serial.println(success);
     success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
-    Serial.print("Success: ");
-    Serial.println(success);
     success &= writeDoubleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
-    Serial.print("Success: ");
-    Serial.println(success);
     success &= writeDoubleRegister(LED_PULSE_OFF_TIME, offTime);
-    Serial.print("Success: ");
-    Serial.println(success);
-    if (success)
-        Serial.println("SSSSSSSSSSSSSUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCEEEEEEEEEEEEEEEEESSSSSSSSSS!!!!");
     return success;
 }
 
