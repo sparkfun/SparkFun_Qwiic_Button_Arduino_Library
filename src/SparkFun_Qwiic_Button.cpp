@@ -78,7 +78,10 @@ uint16_t QwiicButton::getFirmwareVersion()
 bool QwiicButton::setI2Caddress(uint8_t address)
 {
     if (address < 0x08 || address > 0x77)
+    {
+        Serial.println("Error1");
         return 1; //error immediately if the address is out of legal range
+    }
 
     bool success = writeSingleRegister(I2C_ADDRESS, address);
 
@@ -90,6 +93,7 @@ bool QwiicButton::setI2Caddress(uint8_t address)
 
     else
     {
+        Serial.println("Error2");
         return 1; //otherwise just return error
     }
 }
@@ -161,7 +165,6 @@ bool QwiicButton::interruptTriggered()
 {
     interruptConfigBitField interruptConfig;
     interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    Serial.print("1");
     return interruptConfig.status;
 }
 
@@ -259,9 +262,19 @@ unsigned long QwiicButton::popClickedQueue()
 bool QwiicButton::LEDconfig(uint8_t brightness, uint16_t cycleTime, uint16_t offTime, uint8_t granularity)
 {
     bool success = writeSingleRegister(LED_BRIGHTNESS, brightness);
+    Serial.print("Success: ");
+    Serial.println(success);
     success &= writeSingleRegister(LED_PULSE_GRANULARITY, granularity);
+    Serial.print("Success: ");
+    Serial.println(success);
     success &= writeDoubleRegister(LED_PULSE_CYCLE_TIME, cycleTime);
+    Serial.print("Success: ");
+    Serial.println(success);
     success &= writeDoubleRegister(LED_PULSE_OFF_TIME, offTime);
+    Serial.print("Success: ");
+    Serial.println(success);
+    if (success)
+        Serial.println("SSSSSSSSSSSSSUUUUUUUUUUUUUUUUCCCCCCCCCCCCCCCCEEEEEEEEEEEEEEEEESSSSSSSSSS!!!!");
     return success;
 }
 
@@ -337,7 +350,9 @@ bool QwiicButton::writeSingleRegister(Qwiic_Button_Register reg, uint8_t data)
     _i2cPort->beginTransmission(_deviceAddress);
     _i2cPort->write(reg);
     _i2cPort->write(data);
-    return (_i2cPort->endTransmission() != 0);
+    if (_i2cPort->endTransmission() == 0)
+        return true;
+    return false;
 }
 
 bool QwiicButton::writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data)
@@ -346,7 +361,9 @@ bool QwiicButton::writeDoubleRegister(Qwiic_Button_Register reg, uint16_t data)
     _i2cPort->write(reg);
     _i2cPort->write(lowByte(data));
     _i2cPort->write(highByte(data));
-    return (_i2cPort->endTransmission() != 0);
+    if (_i2cPort->endTransmission() == 0)
+        return true;
+    return false;
 }
 
 uint8_t QwiicButton::writeSingleRegisterWithReadback(Qwiic_Button_Register reg, uint8_t data)
