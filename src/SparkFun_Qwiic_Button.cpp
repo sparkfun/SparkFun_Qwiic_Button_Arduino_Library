@@ -41,7 +41,9 @@ bool QwiicButton::begin(uint8_t address, TwoWire &wirePort)
 bool QwiicButton::isConnected()
 {
     _i2cPort->beginTransmission(_deviceAddress);
-    return (_i2cPort->endTransmission() == 0);
+    if (_i2cPort->endTransmission() == 0)
+        return true;
+    return false;
 }
 
 uint8_t QwiicButton::deviceID()
