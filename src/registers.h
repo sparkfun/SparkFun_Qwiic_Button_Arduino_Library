@@ -45,9 +45,10 @@ enum Qwiic_Button_Register : uint8_t
 typedef union {
     struct
     {
-        bool hasBeenClicked : 1; //mutable by user, basically behaves like an interrupt. Defaults to zero on POR, but gets set to one every time the button gets clicked. Can be cleared by the user, and that happens regularly in the accompnaying arduino library
-        bool isPressed : 1;      //not mutable by user, set to zero if button is not pushed, set to one if button is pushed
-        bool : 6;
+        bool eventAvailable : 1; //This is bit 0. User mutable, gets set to 1 when a new event occurs. User is expected to write 0 to clear the flag.
+        bool hasBeenClicked : 1; //Defaults to zero on POR. Gets set to one when the button gets clicked. Must be cleared by the user.
+        bool isPressed : 1;      //Gets set to one if button is pushed.
+        bool : 5;
     };
     uint8_t byteWrapped;
 } statusRegisterBitField;
@@ -55,10 +56,9 @@ typedef union {
 typedef union {
     struct
     {
-        bool status : 1;        //user mutable, gets set to 1 when the interrupt is triggered. User is expected to write 0 to clear the interrupt.
-        bool clickedEnable : 1; //user mutable, set to 1 to enable an interrupt when the button is clicked. Defaults to 0.
+        bool clickedEnable : 1; //This is bit 0. user mutable, set to 1 to enable an interrupt when the button is clicked. Defaults to 0.
         bool pressedEnable : 1; //user mutable, set to 1 to enable an interrupt when the button is pressed. Defaults to 0.
-        bool : 5;
+        bool : 6;
     };
     uint8_t byteWrapped;
 } interruptConfigBitField;
@@ -66,7 +66,7 @@ typedef union {
 typedef union {
     struct
     {
-        bool popRequest : 1; //user mutable, user sets to 1 to pop from queue, we pop from queue and set the bit back to zero.
+        bool popRequest : 1; //This is bit 0. User mutable, user sets to 1 to pop from queue, we pop from queue and set the bit back to zero.
         bool isEmpty : 1;    //user immutable, returns 1 or 0 depending on whether or not the queue is empty
         bool isFull : 1;     //user immutable, returns 1 or 0 depending on whether or not the queue is full
         bool : 5;

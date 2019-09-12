@@ -133,58 +133,60 @@ uint8_t QwiicButton::setDebounceTime(uint16_t time)
 /*------------------- Interrupt Status/Configuration ---------------- */
 uint8_t QwiicButton::enablePressedInterrupt()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.pressedEnable = 1;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    interruptConfigBitField interruptConfigure;
+    interruptConfigure.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfigure.pressedEnable = 1;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
 }
 
 uint8_t QwiicButton::disablePressedInterrupt()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.pressedEnable = 0;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    interruptConfigBitField interruptConfigure;
+    interruptConfigure.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfigure.pressedEnable = 0;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
 }
 
 uint8_t QwiicButton::enableClickedInterrupt()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.clickedEnable = 1;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    interruptConfigBitField interruptConfigure;
+    interruptConfigure.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfigure.clickedEnable = 1;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
 }
 
 uint8_t QwiicButton::disableClickedInterrupt()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.clickedEnable = 0;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    interruptConfigBitField interruptConfigure;
+    interruptConfigure.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
+    interruptConfigure.clickedEnable = 0;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
 }
 
 bool QwiicButton::interruptTriggered()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    return interruptConfig.status;
+    statusRegisterBitField buttonStatus;
+    buttonStatus.byteWrapped = readSingleRegister(BUTTON_STATUS);
+    return buttonStatus.eventAvailable;
 }
 
 uint8_t QwiicButton::clearInterrupt()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.byteWrapped = readSingleRegister(INTERRUPT_CONFIG);
-    interruptConfig.status = 0;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    statusRegisterBitField buttonStatus;
+    buttonStatus.byteWrapped = readSingleRegister(BUTTON_STATUS);
+    buttonStatus.eventAvailable = 0;
+    return writeSingleRegisterWithReadback(BUTTON_STATUS, buttonStatus.byteWrapped);
 }
 
 uint8_t QwiicButton::resetInterruptConfig()
 {
-    interruptConfigBitField interruptConfig;
-    interruptConfig.pressedEnable = 0;
-    interruptConfig.clickedEnable = 0;
-    interruptConfig.status = 0;
-    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfig.byteWrapped);
+    interruptConfigBitField interruptConfigure;
+    interruptConfigure.pressedEnable = 0;
+    interruptConfigure.clickedEnable = 0;
+    return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
+    statusRegisterBitField buttonStatus;
+    buttonStatus.eventAvailable = 0;
+    return writeSingleRegisterWithReadback(BUTTON_STATUS, buttonStatus.byteWrapped);
 }
 
 /*------------------------- Queue Manipulation ---------------------- */
