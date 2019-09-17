@@ -19,36 +19,46 @@
 QwiicButton button;
 uint8_t brightness = 100;   //The brightness to set the LED to when interrupt pin is high
                             //Can be any value between 0 (off) and 255 (max)
-int interruptPin = 0;
-int val;
+int interruptPin = 2; //pin that will change states when interrupt is triggered
 
 void setup() {
   Serial.begin(115200);
+  Serial.println("Qwiic button examples");
+
+  //  while(1);
   Wire.begin(); //Join I2C bus
 
   //intialize interrupt pin
-  pinMode(interruptPin, INPUT);
-  
+  pinMode(interruptPin, INPUT_PULLUP);
+
   //check if button will acknowledge over I2C
-  if (button.begin() == false){
+  if (button.begin() == false) {
     Serial.println("Device did not acknowledge! Freezing.");
-    while(1);
+    while (1);
   }
-  Serial.println("Button will acknowledge.");
+  Serial.println("Button acknowledged.");
+
+  button.enablePressedInterrupt();  //configure the interrupt pin to go low when we press the button.
+  button.enableClickedInterrupt();  //configure the interrupt pin to go low when we click the button.
+  button.clearEventBits();  //once event bits are cleared, interrupt pin goes high
 }
 
 void loop() {
   //check state of interrupt pin
-  //interrupt pin is active-low, high-impedance when not triggered, goes low-impedance to ground when triggered
-  val = digitalRead(interruptPin);
-  Serial.println(val);
-  if (val == 0){
-    button.LEDon(brightness);
-    button.clearInterrupt();
-  }
-  else if (val == 1){
-    button.LEDoff();
-  }
+  //interrupt pin goes low when user presses the button
+  if (digitalRead(interruptPin) == LOW) {
+    Serial.println("Button event!");
 
+    //check if button is pressed, and tell us if it is!
+    if (button.isPressed() == true) {
+      Serial.println("The button is pressed!");
+    }
+
+    //check if the button has been clicked, and tell us if it is!
+    if (button.hasBeenClicked() == true) {
+      Serial.println("The button has been clicked!");
+    }
+    button.clearEventBits();  //once event bits are cleared, interrupt pin goes high
+  }
   delay(20); //Don't hammer too hard on the I2C bus
 }

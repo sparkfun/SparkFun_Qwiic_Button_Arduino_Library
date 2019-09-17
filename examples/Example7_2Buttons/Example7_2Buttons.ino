@@ -21,9 +21,6 @@
 #include <SparkFun_Qwiic_Button.h>
 QwiicButton button1;
 QwiicButton button2;
-//To keep track of button transitions
-int b1state = 0;
-int b2state = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -35,12 +32,6 @@ void setup() {
     Serial.println("Button 1 did not acknowledge! Freezing.");
     while(1);
   }
-
-//  if (button1.setI2Caddress(0x5B) == false){
-//    Serial.println("Button 1 did not change addresses!");  
-//    while(1);
-//  }
-  
   if (button2.begin() == false) {
     Serial.println("Button 2 did not acknowledge! Freezing.");
     while(1);
@@ -50,36 +41,19 @@ void setup() {
 
 void loop() {
   //check if button 1 is pressed, and tell us if it is!
-  if (button1.isPressed() == true && b1state == 0) {
-    b1state = 1;
+  if (button1.isPressed() == true) {
     Serial.println("Button 1 is pressed!");
-  }
-  else if (button1.isPressed() == true && b1state == 1){
-    delay(1);
-  }
-  else if (button1.isPressed() == false && b1state == 1){
-    b1state = 0;
+    while (button1.isPressed() == true)
+      delay(10);  //wait for user to stop pressing
     Serial.println("Button 1 is not pressed.");
-  }
-  else {
-    delay(1);
   }
 
   //check if button 2 is pressed, and tell us if it is!
-  if (button2.isPressed() == true && b2state == 0){
-    b2state = 1;
+  if (button2.isPressed() == true){
     Serial.println("Button 2 is pressed!");
-  }
-  else if (button2.isPressed() == true && b2state == 1){
-    delay(1);
-  }
-  else if (button2.isPressed() == false && b2state == 1){
-    b2state = 0;
+    while (button2.isPressed() == true)
+      delay(10);  //wait for user to stop pressing
     Serial.println("Button 2 is not pressed.");
   }
-  else {
-    delay(1);
-  }
-
   delay(20); //Don't hammer too hard on the I2C bus.
 }

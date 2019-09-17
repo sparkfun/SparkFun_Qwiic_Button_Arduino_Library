@@ -26,11 +26,6 @@ Distributed as-is; no warranty is given.
 #include <Arduino.h>
 #include "registers.h"
 
-// #define DEFAULT_BUTTON_ADDRESS 0x6F //default I2C address of the button
-// #define DEFAULT_SWITCH_ADDRESS 0x46 //default I2C address of the switch
-// #define DEV_ID_BTN 0x5D             //device ID of the Qwiic Button
-// #define DEV_ID_SW 0x5E              //device ID of the Qwiic Switch
-
 #define DEFAULT_ADDRESS 0x6F //default I2C address of the button
 #define DEV_ID 0x5D          //device ID of the Qwiic Button
 
@@ -64,7 +59,9 @@ public:
     uint8_t disableClickedInterrupt(); //When called, the interrupt will no longer be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will still trigger on the button press.
     bool interruptTriggered();         //Returns true if the interrupt has been triggered, false otherwise.
     uint8_t clearInterrupt();          //Clears the interrupt flag on the button. Also resets the INT pin to whatever it's resting state is.
-    uint8_t resetInterruptConfig();    //Resets the interrupt configuration back to defaults.
+    bool available();
+    uint8_t clearEventBits();
+    uint8_t resetInterruptConfig(); //Resets the interrupt configuration back to defaults.
 
     //Queue manipulation
     bool isPressedQueueFull();           //Returns true if the queue of button press timestamps is full, and false otherwise.

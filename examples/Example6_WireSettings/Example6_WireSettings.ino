@@ -1,9 +1,8 @@
 /******************************************************************************
-  Checks whether the button is pressed, and light it up if it is! Also prints
-  status to the serial monitor.
+  Checks whether the button is pressed, and then prints its status over serial!
 
   Fischer Moseley @ SparkFun Electronics
-  Original Creation Date: July 24, 2019
+  Original Creation Date: June 28, 2019
 
   This code is Lemonadeware; if you see me (or any other SparkFun employee) at the
   local, and you've found our code helpful, please buy us a round!
@@ -18,44 +17,27 @@
 
 #include <SparkFun_Qwiic_Button.h>
 QwiicButton button;
-//Define LED characteristics
-uint8_t brightness = 250;   //The maximum brightness of the pulsing LED. Can be between 0 (min) and 255 (max)
-uint16_t cycleTime = 1000;   //The total time for the pulse to take. Set to a bigger number for a slower pulse, or a smaller number for a faster pulse
-uint16_t offTime = 200;     //The total time to stay off between pulses. Set to 0 to be pulsing continuously.
-//To keep track of button transitions
-int state = 0;
 
 void setup() {
   Serial.begin(115200);
   Serial.println("Qwiic button examples");
-  Wire.begin(); //Join I2C bus
+  Wire1.begin(); //Compilation will fail here if your platform doesn't have multiple I2C ports
 
   //check if button will acknowledge over I2C
   if (button.begin() == false) {
     Serial.println("Device did not acknowledge! Freezing.");
-    while (1);
+    while(1);
   }
   Serial.println("Button acknowledged.");
 }
 
 void loop() {
   //check if button is pressed, and tell us if it is!
-  if (button.isPressed() == true && state == 0) {
-    state = 1;
+  if (button.isPressed() == true) {
     Serial.println("The button is pressed!");
-    button.LEDconfig(brightness, 1, cycleTime, offTime);
-  }
-  else if (button.isPressed() == true && state == 1) {
-    delay(1);
-  }
-  else if (button.isPressed() == false && state == 1) {
-    state = 0;
+    while (button.isPressed() == true)
+      delay(10);  //wait for the user to stop pressing
     Serial.println("The button is not pressed.");
-    button.LEDoff();
   }
-  else {
-    delay(1);
-  }
-
-  delay(20); //let's not hammer too hard on the I2C bus
+  delay(20);  //Don't hammer too hard on the I2C bus
 }

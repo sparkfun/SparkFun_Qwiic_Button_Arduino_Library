@@ -18,8 +18,6 @@
 
 #include <SparkFun_Qwiic_Button.h>
 QwiicButton button;
-//uint8_t newAddress = 0;
-
 
 void setup() {
   Serial.begin(115200);
@@ -41,7 +39,8 @@ void setup() {
     Serial.println("One more thing! Make sure your line ending is set to 'Both NL & CR'");
     Serial.println("in the Serial Monitor.");
     Serial.println();
-  
+
+    //Wait for serial data to be available
     while (Serial.available() == 0);
   
     if (Serial.available()) {
@@ -65,7 +64,7 @@ void setup() {
             Serial.println("Device address set failed!");
           }
   
-          delay(100); //give the hardware time to do whatever configuration it needs to do\
+          delay(100); //give the hardware time to do whatever configuration it needs to do
   
           if (button.isConnected()) {
             Serial.println("Device will acknowledge on new I2C address!");
@@ -90,6 +89,8 @@ void setup() {
 }
 
 void loop() {
+  //if no I2C device found or Qwiic button correctly set to new address, 
+  //scan for available I2C devices
   byte error, address;
   int nDevices;
 

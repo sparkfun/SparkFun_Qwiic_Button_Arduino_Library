@@ -163,17 +163,19 @@ uint8_t QwiicButton::disableClickedInterrupt()
     return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
 }
 
-bool QwiicButton::interruptTriggered()
+bool QwiicButton::available()
 {
     statusRegisterBitField buttonStatus;
     buttonStatus.byteWrapped = readSingleRegister(BUTTON_STATUS);
     return buttonStatus.eventAvailable;
 }
 
-uint8_t QwiicButton::clearInterrupt()
+uint8_t QwiicButton::clearEventBits()
 {
     statusRegisterBitField buttonStatus;
     buttonStatus.byteWrapped = readSingleRegister(BUTTON_STATUS);
+    buttonStatus.isPressed = 0;
+    buttonStatus.hasBeenClicked = 0;
     buttonStatus.eventAvailable = 0;
     return writeSingleRegisterWithReadback(BUTTON_STATUS, buttonStatus.byteWrapped);
 }
@@ -181,8 +183,8 @@ uint8_t QwiicButton::clearInterrupt()
 uint8_t QwiicButton::resetInterruptConfig()
 {
     interruptConfigBitField interruptConfigure;
-    interruptConfigure.pressedEnable = 0;
-    interruptConfigure.clickedEnable = 0;
+    interruptConfigure.pressedEnable = 1;
+    interruptConfigure.clickedEnable = 1;
     return writeSingleRegisterWithReadback(INTERRUPT_CONFIG, interruptConfigure.byteWrapped);
     statusRegisterBitField buttonStatus;
     buttonStatus.eventAvailable = 0;
