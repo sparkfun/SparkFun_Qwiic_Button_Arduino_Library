@@ -26,8 +26,8 @@ enablePressedInterrupt  KEYWORD2
 disablePressedInterrupt KEYWORD2
 enableClickedInterrupt  KEYWORD2
 disableClickedInterrupt KEYWORD2
-interruptTriggered  KEYWORD2
-clearInterrupt  KEYWORD2
+available  KEYWORD2
+clearEventBits  KEYWORD2
 resetInterruptConfig    KEYWORD2
 isPressedQueueFull  KEYWORD2
 isPressedQueueEmpty KEYWORD2

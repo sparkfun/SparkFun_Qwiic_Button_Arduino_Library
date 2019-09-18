@@ -57,11 +57,9 @@ public:
     uint8_t disablePressedInterrupt(); //When called, the interrupt will no longer be configured to trigger when the button is pressed. If enableClickedInterrupt() has also been called, then the interrupt will still trigger on the button click.
     uint8_t enableClickedInterrupt();  //When called, the interrupt will be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will trigger on either a push or a click.
     uint8_t disableClickedInterrupt(); //When called, the interrupt will no longer be configured to trigger when the button is clicked. If enablePressedInterrupt() has also been called, then the interrupt will still trigger on the button press.
-    bool interruptTriggered();         //Returns true if the interrupt has been triggered, false otherwise.
-    uint8_t clearInterrupt();          //Clears the interrupt flag on the button. Also resets the INT pin to whatever it's resting state is.
-    bool available();
-    uint8_t clearEventBits();
-    uint8_t resetInterruptConfig(); //Resets the interrupt configuration back to defaults.
+    bool available();                  //Returns the eventAvailable bit
+    uint8_t clearEventBits();          //Sets isPressed, hasBeenClicked, and eventAvailable to zero
+    uint8_t resetInterruptConfig();    //Resets the interrupt configuration back to defaults.
 
     //Queue manipulation
     bool isPressedQueueFull();           //Returns true if the queue of button press timestamps is full, and false otherwise.

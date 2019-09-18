@@ -298,6 +298,7 @@ uint8_t QwiicButton::readSingleRegister(Qwiic_Button_Register reg)
     {
         return _i2cPort->read();
     }
+    return 0;
 }
 
 uint16_t QwiicButton::readDoubleRegister(Qwiic_Button_Register reg)
@@ -314,6 +315,7 @@ uint16_t QwiicButton::readDoubleRegister(Qwiic_Button_Register reg)
         data |= (_i2cPort->read() << 8);
         return data;
     }
+    return 0;
 }
 
 unsigned long QwiicButton::readQuadRegister(Qwiic_Button_Register reg)

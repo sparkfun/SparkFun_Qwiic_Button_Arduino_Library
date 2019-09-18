@@ -21,10 +21,11 @@ QwiicButton button;
 void setup() {
   Serial.begin(115200);
   Serial.println("Qwiic button examples");
+  Wire1.setClock(400000); //set I2C communication to 400kHz
   Wire1.begin(); //Compilation will fail here if your platform doesn't have multiple I2C ports
 
   //check if button will acknowledge over I2C
-  if (button.begin() == false) {
+  if (button.begin(0x6F, Wire1) == false) {
     Serial.println("Device did not acknowledge! Freezing.");
     while(1);
   }

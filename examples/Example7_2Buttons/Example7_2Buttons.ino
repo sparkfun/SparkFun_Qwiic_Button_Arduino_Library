@@ -28,10 +28,12 @@ void setup() {
   Wire.begin(); //Join I2C bus
 
   //check if the buttons will acknowledge over I2C
+  //connect to Qwiic button at address 0x5B
   if (button1.begin(0x5B) == false){
     Serial.println("Button 1 did not acknowledge! Freezing.");
     while(1);
   }
+  //connect to Qwiic button at default address, 0x6F
   if (button2.begin() == false) {
     Serial.println("Button 2 did not acknowledge! Freezing.");
     while(1);

@@ -25,7 +25,6 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Qwiic button examples");
 
-  //  while(1);
   Wire.begin(); //Join I2C bus
 
   //intialize interrupt pin
