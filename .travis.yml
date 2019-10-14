@@ -22,41 +22,39 @@ install:
   - arduino --install-boards SparkFun:samd
   - arduino --install-boards SparkFun:apollo3
   - arduino --install-boards SparkFun:avr
-  # - arduino --pref "boardsmanager.additional.urls=https://adafruit.github.io/arduino-board-index/package_adafruit_index.json" --save-prefs
-  # - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
 
 script:
-  # #compile for arduino AVR
-  # - echo Compiling for Arduino AVR...
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
-  # # - arduino --verify --board arduino:avr:uno $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
-  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
+  #compile for arduino AVR
+  - echo Compiling for Arduino AVR...
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
+  # - arduino --verify --board arduino:avr:uno $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
+  - arduino --verify --board arduino:avr:uno $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
 
-  # # #compile for arduino SAMD
-  # - echo Compiling for Arduino SAMD...
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
-  # # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
-  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
+  # #compile for arduino SAMD
+  - echo Compiling for Arduino SAMD...
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
+  # - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
+  - arduino --verify --board arduino:samd:arduino_zero_edbg $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
 
-  # #compile for SparkFun AVR
-  # - echo Compiling for SparkFun AVR...
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
-  # # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
-  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
+  #compile for SparkFun AVR
+  - echo Compiling for SparkFun AVR...
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example1_PrintButtonStatus/Example1_PrintButtonStatus.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example2_LightWhenPressed/Example2_LightWhenPressed.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
+  # - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
+  - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
   - arduino --verify --board SparkFun:avr:RedBoard $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
 
   #compile for SparkFun SAMD
@@ -66,7 +64,7 @@ script:
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example3_PulseWhenPressed/Example3_PulseWhenPressed.ino
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example4_QueueUsage/Example4_QueueUsage.ino
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example5_ChangeI2CAddress/Example5_ChangeI2CAddress.ino
-  - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
+  # - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example6_WireSettings/Example6_WireSettings.ino
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example7_2Buttons/Example7_2Buttons.ino
   - arduino --verify --board SparkFun:samd:samd51_thing_plus $PWD/examples/Example8_ExtInterrupt/Example8_ExtInterrupt.ino
 
