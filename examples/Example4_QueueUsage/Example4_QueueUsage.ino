@@ -1,6 +1,5 @@
 /******************************************************************************
-Configures the button to raise an interrupt when pressed, and notifies us over
-serial. Allows us to enable/disable/reset the interrupt too!
+Shows how to use the FIFO Queue on the Qwiic Button
 
 Fischer Moseley @ SparkFun Electronics
 Original Creation Date: July 29, 2019
