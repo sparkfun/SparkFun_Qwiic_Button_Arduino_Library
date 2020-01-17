@@ -20,10 +20,7 @@ QwiicButton button;
 uint8_t brightness = 100;   //The brightness to set the LED to when interrupt pin is high
 //Can be any value between 0 (off) and 255 (max)
 int interruptPin = 2; //pin that will change states when interrupt is triggered
-int ledPin = 13;
 
-bool buttonIsPressed = false;
-bool buttonHasBeenClicked = false;
 bool interruptEntered = false; //Interrupt flag so we can clear things outside of the interrupt
 
 void setup() {
