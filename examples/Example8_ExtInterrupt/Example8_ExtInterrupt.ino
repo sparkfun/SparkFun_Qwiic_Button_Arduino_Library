@@ -18,8 +18,13 @@
 #include <SparkFun_Qwiic_Button.h>
 QwiicButton button;
 uint8_t brightness = 100;   //The brightness to set the LED to when interrupt pin is high
-                            //Can be any value between 0 (off) and 255 (max)
+//Can be any value between 0 (off) and 255 (max)
 int interruptPin = 2; //pin that will change states when interrupt is triggered
+int ledPin = 13;
+
+bool buttonIsPressed = false;
+bool buttonHasBeenClicked = false;
+bool interruptEntered = false; //Interrupt flag so we can clear things outside of the interrupt
 
 void setup() {
   Serial.begin(115200);
@@ -28,7 +33,8 @@ void setup() {
   Wire.begin(); //Join I2C bus
 
   //intialize interrupt pin
-  pinMode(interruptPin, INPUT_PULLUP);
+  pinMode(interruptPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), buttonHandler, FALLING);
 
   //check if button will acknowledge over I2C
   if (button.begin() == false) {
@@ -43,9 +49,8 @@ void setup() {
 }
 
 void loop() {
-  //check state of interrupt pin
-  //interrupt pin goes low when user presses the button
-  if (digitalRead(interruptPin) == LOW) {
+  if (interruptEntered)
+  {
     Serial.println("Button event!");
 
     //check if button is pressed, and tell us if it is!
@@ -58,6 +63,12 @@ void loop() {
       Serial.println("The button has been clicked!");
     }
     button.clearEventBits();  //once event bits are cleared, interrupt pin goes high
+    interruptEntered = false;
+    delay(15);
   }
-  delay(20); //Don't hammer too hard on the I2C bus
+}
+
+void buttonHandler()
+{
+  interruptEntered = true;
 }
