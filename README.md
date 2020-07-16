@@ -2,15 +2,15 @@ SparkFun Qwiic Button Arduino Library [![Build Status](https://travis-ci.org/spa
 ========================================
 <table class="table table-hover table-striped table-bordered">
   <tr align="center">
-   <td><a href="https://www.sparkfun.com/products/15584"><img src="https://cdn.sparkfun.com//assets/parts/1/4/1/9/0/15584-Qwiic_Button_-_Red-01a.jpg"></a></td>
-   <td><a href="https://www.sparkfun.com/products/15585"><img src="https://cdn.sparkfun.com//assets/parts/1/4/1/9/1/15585-Qwiic_Button_-_Blue-02a.jpg"></a></td>
+   <td><a href="https://www.sparkfun.com/products/15932"><img src="https://cdn.sparkfun.com/assets/parts/1/4/5/7/3/15932-SparkFun_Qwiic_Button_-_Red-01.jpg"></a></td>
+   <td><a href="https://www.sparkfun.com/products/15931"><img src="https://cdn.sparkfun.com/assets/parts/1/4/5/7/2/15931-SparkFun_Qwiic_Button_Breakout-01.jpg"></a></td>
    <td><a href="https://www.sparkfun.com/products/15591"><img src="https://cdn.sparkfun.com//assets/parts/1/4/1/9/8/15591-Qwiic_Arcade_-_Red-01a.jpg"></a></td>
    <td><a href="https://www.sparkfun.com/products/15592"><img src="https://cdn.sparkfun.com//assets/parts/1/4/1/9/9/15592-Qwiic_Arcade_-_Blue-01a.jpg"></a></td>
    <td><a href="https://www.sparkfun.com/products/15586"><img src="https://cdn.sparkfun.com//assets/parts/1/4/1/9/2/15586-Qwiic_Switch__without_microswitch_-01a.jpg"></a></td>
   </tr>
   <tr align="center">
-    <td><a href="https://www.sparkfun.com/products/15584">SparkFun Qwiic Button - Red (SPX-15584)</a></td>
-    <td><a href="https://www.sparkfun.com/products/15585">SparkFun Qwiic Button - Blue (SPX-15585)</a></td>
+    <td><a href="https://www.sparkfun.com/products/15932">SparkFun Qwiic Button - Red (BOB-15932)</a></td>
+    <td><a href="https://www.sparkfun.com/products/15931">SparkFun Qwiic Button Breakout (BOB-15931)</a></td>
     <td><a href="https://www.sparkfun.com/products/15591">SparkFun Qwiic Arcade - Red (SPX-15591)</a></td>
     <td><a href="https://www.sparkfun.com/products/15592">SparkFun Qwiic Arcade - Blue (SPX-15592)</a></td>
     <td><a href="https://www.sparkfun.com/products/15586">SparkFun Qwiic Switch (SPX-15586)</a></td>
@@ -39,17 +39,21 @@ Documentation
 --------------
 
 * **[Installing an Arduino Library Guide](https://learn.sparkfun.com/tutorials/installing-an-arduino-library)** - Basic information on how to install an Arduino library.
+* **[Product Repository](https://github.com/sparkfun/Qwiic_Button)** - Main repository (including hardware files) for the SparkFun Qwiic Button Breakout Board.
 * **[Product Repository](https://github.com/sparkfunX/Qwiic_Switch)** - Main repository (including hardware files) for the SparkFun Qwiic Switch.
 * **[Product Repository](https://github.com/sparkfunX/Qwiic_Button)** - Main repository (including hardware files) for the SparkFun Qwiic Button.
 
 Products that use this Library 
 ---------------------------------
 
-* [*SPX-15584*](https://www.sparkfun.com/products/15584)
-* [*SPX-15585*](https://www.sparkfun.com/products/15585)
-* [*SPX-15591*](https://www.sparkfun.com/products/15591)
-* [*SPX-15592*](https://www.sparkfun.com/products/15592)
-* [*SPX-15586*](https://www.sparkfun.com/products/15586)
+* [*BOB-15932*](https://www.sparkfun.com/products/15932) - SparkFun Red Version with red LED pushbutton
+* [*BOB-16842*](https://www.sparkfun.com/products/16842) - SparkFun Red Version with green LED pushbutton
+* [*BOB-15931*](https://www.sparkfun.com/products/15931) - SparkFun Red Version without button
+* [*SPX-15584*](https://www.sparkfun.com/products/15584) - Original SparkX version of the Qwiic Button (Red LED)
+* [*SPX-15585*](https://www.sparkfun.com/products/15585) - Original SparkX version of the Qwiic Button (Blue LED)
+* [*SPX-15591*](https://www.sparkfun.com/products/15591) - Original SparkX version of the Qwiic Button (Arcade Red Pushbutton)
+* [*SPX-15592*](https://www.sparkfun.com/products/15592) - Original SparkX version of the Qwiic Button (Arcade Blue Pushbutton)
+* [*SPX-15586*](https://www.sparkfun.com/products/15586) - Original SparkX version of the Qwiic Button
 
 Version History
 ---------------
