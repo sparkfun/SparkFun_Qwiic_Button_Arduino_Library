@@ -39,9 +39,8 @@ void loop(){
         Serial.print(button.timeSinceFirstPress()/1000.0);
         Serial.print("s since the button was first pressed   ");
     }
-
     //if the queue of pressed events is empty, just print that the queue is empty!
-    if(button.isPressedQueueEmpty() == true) {
+    else {
         Serial.print("ButtonPressed Queue is empty! ");
     } 
 
@@ -53,7 +52,7 @@ void loop(){
         Serial.print("s since the button was first clicked");
     }
     //if the queue of clicked events is empty, just print that the queue is empty!
-    if(button.isPressedQueueEmpty() == true) {
+    else {
         Serial.print("  ButtonClicked Queue is empty!");
     }
 
@@ -63,13 +62,19 @@ void loop(){
         
         uint8_t data = Serial.read();
         if(data == 'p' || data == 'P') { //if the character is p or P, then pop a value off of the pressed Queue
-            button.popPressedQueue();
-            Serial.println("Popped PressedQueue!");
+            long pressedPopped = button.popPressedQueue();
+            Serial.print("Popped from PressedQueue: ");
+            Serial.println(pressedPopped/1000.0);
+            // Wait before continuing on
+            delay(3000);
         }
 
         if(data == 'c' || data == 'C') { //if the character is c or C, then pop a value off of the pressed Queue
-            button.popClickedQueue();
-            Serial.println("Popped ClickedQueue!");
+            long clickedPopped = button.popClickedQueue();
+            Serial.print("Popped from Clicked Queue: ");
+            Serial.println(clickedPopped/1000.0);
+            // Wait before continuing on 
+            delay(3000);
         }
     }
     delay(20); //let's not hammer too hard on the I2C bus
