@@ -26,7 +26,7 @@ Distributed as-is; no warranty is given.
 #include <Arduino.h>
 #include "registers.h"
 
-#define DEFAULT_ADDRESS 0x6F //default I2C address of the button
+#define DEFAULT_QWIIC_BUTTON_ADDRESS 0x6F //default I2C address of the button
 #define DEV_ID 0x5D          //device ID of the Qwiic Button
 
 class QwiicButton
@@ -37,7 +37,7 @@ private:
 
 public:
     //Device status
-    bool begin(uint8_t address = DEFAULT_ADDRESS, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies.
+    bool begin(uint8_t address = DEFAULT_QWIIC_BUTTON_ADDRESS, TwoWire &wirePort = Wire); //Sets device I2C address to a user-specified address, over whatever port the user specifies.
     bool isConnected();                                                      //Returns true if the button/switch will acknowledge over I2C, and false otherwise
     uint8_t deviceID();                                                      //Return the 8-bit device ID of the attached device.
     bool checkDeviceID();                                                    //Returns true if the device ID matches that of either the button or the switch
